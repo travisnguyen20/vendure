@@ -6,10 +6,10 @@ const fs = require('fs');
 console.log('Copying main package.json to library...');
 const packageJson = require('../package.json');
 const depsToRemove = [
-    '@angular/core',
+    /*'@angular/core',
     '@angular/forms',
     '@angular/router',
-    'rxjs',
+    'rxjs',*/
     '@vendure/common',
     '@vendure/ui-devkit',
 ];

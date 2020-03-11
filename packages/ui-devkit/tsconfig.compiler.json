@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./compiler",
+    "outDir": "./package/compiler",
     "sourceMap": true,
     "module": "commonjs",
     "declaration": true,

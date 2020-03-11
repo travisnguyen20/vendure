@@ -18,5 +18,5 @@ cd ../create && npm publish -reg $VERDACCIO &&\
 cd ../elasticsearch-plugin && npm publish -reg $VERDACCIO &&\
 cd ../email-plugin && npm publish -reg $VERDACCIO &&\
 cd ../testing && npm publish -reg $VERDACCIO &&\
-cd ../ui-devkit && npm publish -reg $VERDACCIO &&\
-cd ../admin-ui/package && npm publish -reg $VERDACCIO
+cd ../ui-devkit/package && npm publish -reg $VERDACCIO &&\
+cd ../../admin-ui/package && npm publish -reg $VERDACCIO

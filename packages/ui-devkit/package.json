@@ -27,7 +27,7 @@
   "scripts": {
     "build:client": "rimraf ./client && rollup -c rollup.config.js --configProduction",
     "build:compiler": "rimraf ./compiler && tsc -p tsconfig.compiler.json",
-    "build": "yarn build:client && yarn build:compiler",
+    "build": "yarn build:client && yarn build:compiler && node build.js",
     "watch": "rimraf ./lib && rollup -c rollup.config.js -w",
     "lint": "tslint --fix --project ./"
   },
@@ -39,15 +39,12 @@
     "@angular/cli": "^9.0.5",
     "@angular/compiler": "^9.0.6",
     "@angular/compiler-cli": "^9.0.6",
-    "@vendure/admin-ui": "^0.10.13",
-    "@vendure/common": "^0.10.13",
+    "@vendure/common": "^0.10.15",
     "chokidar": "^3.0.2",
     "rxjs": "^6.5.4"
   },
   "peerDependencies": {
-    "@angular/core": "^9.0.6",
-    "@angular/forms": "^9.0.6",
-    "@angular/router": "^9.0.6"
+    "@vendure/admin-ui": "^0.9.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^6.0.0",

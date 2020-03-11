@@ -18,6 +18,8 @@ const MODULES_OUTPUT_DIR = 'src/extensions';
 const EXTENSION_ROUTES_FILE = 'src/extension.routes.ts';
 const SHARED_EXTENSIONS_FILE = 'src/shared-extensions.module.ts';
 
+// const SOURCE_DIR = path.join(__dirname, '../__source__');
+
 /**
  * Builds the admin-ui app using the Angular CLI `ng build --prod` command.
  */

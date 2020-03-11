@@ -8,7 +8,7 @@ export default commandLineArgs => {
     return {
         input: 'src/client/index.ts',
         output: {
-            dir: 'client',
+            dir: 'package/client',
             format: 'umd',
             name: 'VendureUiDevkit',
         },
