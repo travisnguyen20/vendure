@@ -2469,7 +2469,12 @@ export enum Permission {
   CreateSettings = 'CreateSettings',
   ReadSettings = 'ReadSettings',
   UpdateSettings = 'UpdateSettings',
-  DeleteSettings = 'DeleteSettings'
+  DeleteSettings = 'DeleteSettings',
+  // Extended
+  CreateVendor = "CreateVendor",
+  ReadVendor = "ReadVendor",
+  UpdateVendor = "UpdateVendor",
+  DeleteVendor = "DeleteVendor"
 }
 
 /** The price range where the result has more than one price */
