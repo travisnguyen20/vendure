@@ -44,4 +44,10 @@ enum Permission {
     ReadSettings
     UpdateSettings
     DeleteSettings
+
+    CreateVendor,
+    ReadVendor,
+    UpdateVendor,
+    DeleteVendor
+
 }
