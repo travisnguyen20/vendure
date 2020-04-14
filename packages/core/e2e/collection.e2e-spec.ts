@@ -1,6 +1,10 @@
 /* tslint:disable:no-non-null-assertion */
 import { ROOT_COLLECTION_NAME } from '@vendure/common/lib/shared-constants';
-import { facetValueCollectionFilter, variantNameCollectionFilter } from '@vendure/core';
+import {
+    DefaultJobQueuePlugin,
+    facetValueCollectionFilter,
+    variantNameCollectionFilter,
+} from '@vendure/core';
 import { createTestEnvironment } from '@vendure/testing';
 import gql from 'graphql-tag';
 import path from 'path';
@@ -48,7 +52,10 @@ import { assertThrowsWithMessage } from './utils/assert-throws-with-message';
 import { awaitRunningJobs } from './utils/await-running-jobs';
 
 describe('Collection resolver', () => {
-    const { server, adminClient } = createTestEnvironment(testConfig);
+    const { server, adminClient } = createTestEnvironment({
+        ...testConfig,
+        plugins: [DefaultJobQueuePlugin],
+    });
 
     let assets: GetAssetList.Items[];
     let facetValues: FacetValueFragment[];
@@ -346,6 +353,8 @@ describe('Collection resolver', () => {
         });
 
         it('re-evaluates Collection contents on move', async () => {
+            await awaitRunningJobs(adminClient);
+
             const result = await adminClient.query<
                 GetCollectionProducts.Query,
                 GetCollectionProducts.Variables
@@ -477,6 +486,7 @@ describe('Collection resolver', () => {
                         translations: [
                             { languageCode: LanguageCode.en, name: 'Delete Me Parent', description: '' },
                         ],
+                        assetIds: ['T_1'],
                     },
                 },
             );
@@ -491,10 +501,12 @@ describe('Collection resolver', () => {
                             { languageCode: LanguageCode.en, name: 'Delete Me Child', description: '' },
                         ],
                         parentId: collectionToDeleteParent.id,
+                        assetIds: ['T_2'],
                     },
                 },
             );
             collectionToDeleteChild = result2.createCollection;
+            await awaitRunningJobs(adminClient);
         });
 
         it(
@@ -506,7 +518,7 @@ describe('Collection resolver', () => {
                         id: 'T_999',
                     },
                 );
-            }, "No Collection with the id '999' could be found"),
+            }, 'No Collection with the id \'999\' could be found'),
         );
 
         it('collection and product related prior to deletion', async () => {

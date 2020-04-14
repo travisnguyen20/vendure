@@ -1,6 +1,11 @@
 /* tslint:disable:no-non-null-assertion */
 import { pick } from '@vendure/common/lib/pick';
-import { DefaultSearchPlugin, facetValueCollectionFilter, mergeConfig } from '@vendure/core';
+import {
+    DefaultJobQueuePlugin,
+    DefaultSearchPlugin,
+    facetValueCollectionFilter,
+    mergeConfig,
+} from '@vendure/core';
 import { createTestEnvironment, E2E_DEFAULT_CHANNEL_TOKEN, SimpleGraphQLClient } from '@vendure/testing';
 import gql from 'graphql-tag';
 import path from 'path';
@@ -14,9 +19,11 @@ import {
     CreateCollection,
     CreateFacet,
     CurrencyCode,
+    DeleteAsset,
     DeleteProduct,
     DeleteProductVariant,
     LanguageCode,
+    Reindex,
     RemoveProductsFromChannel,
     SearchFacetValues,
     SearchGetAssets,
@@ -35,6 +42,7 @@ import {
     CREATE_CHANNEL,
     CREATE_COLLECTION,
     CREATE_FACET,
+    DELETE_ASSET,
     DELETE_PRODUCT,
     DELETE_PRODUCT_VARIANT,
     REMOVE_PRODUCT_FROM_CHANNEL,
@@ -49,7 +57,7 @@ import { awaitRunningJobs } from './utils/await-running-jobs';
 
 describe('Default search plugin', () => {
     const { server, adminClient, shopClient } = createTestEnvironment(
-        mergeConfig(testConfig, { plugins: [DefaultSearchPlugin] }),
+        mergeConfig(testConfig, { plugins: [DefaultSearchPlugin, DefaultJobQueuePlugin] }),
     );
 
     beforeAll(async () => {
@@ -108,7 +116,7 @@ describe('Default search plugin', () => {
                 },
             },
         );
-        expect(result.search.items.map(i => i.productName)).toEqual([
+        expect(result.search.items.map((i) => i.productName)).toEqual([
             'Camera Lens',
             'Instant Camera',
             'Slr Camera',
@@ -125,7 +133,7 @@ describe('Default search plugin', () => {
                 },
             },
         );
-        expect(result.search.items.map(i => i.productName)).toEqual([
+        expect(result.search.items.map((i) => i.productName)).toEqual([
             'Laptop',
             'Curvy Monitor',
             'Gaming PC',
@@ -145,7 +153,7 @@ describe('Default search plugin', () => {
                 },
             },
         );
-        expect(result.search.items.map(i => i.productName)).toEqual([
+        expect(result.search.items.map((i) => i.productName)).toEqual([
             'Spiky Cactus',
             'Orchid',
             'Bonsai Tree',
@@ -335,7 +343,7 @@ describe('Default search plugin', () => {
                     },
                 },
             );
-            expect(result.search.items.map(i => i.productVariantId)).toEqual(['T_1', 'T_2', 'T_4']);
+            expect(result.search.items.map((i) => i.productVariantId)).toEqual(['T_1', 'T_2', 'T_4']);
         });
 
         it('encodes collectionIds', async () => {
@@ -373,7 +381,7 @@ describe('Default search plugin', () => {
             it('updates index when ProductVariants are changed', async () => {
                 await awaitRunningJobs(adminClient);
                 const { search } = await doAdminSearchQuery({ term: 'drive', groupByProduct: false });
-                expect(search.items.map(i => i.sku)).toEqual([
+                expect(search.items.map((i) => i.sku)).toEqual([
                     'IHD455T1',
                     'IHD455T2',
                     'IHD455T3',
@@ -384,7 +392,7 @@ describe('Default search plugin', () => {
                 await adminClient.query<UpdateProductVariants.Mutation, UpdateProductVariants.Variables>(
                     UPDATE_PRODUCT_VARIANTS,
                     {
-                        input: search.items.map(i => ({
+                        input: search.items.map((i) => ({
                             id: i.productVariantId,
                             sku: i.sku + '_updated',
                         })),
@@ -397,7 +405,7 @@ describe('Default search plugin', () => {
                     groupByProduct: false,
                 });
 
-                expect(search2.items.map(i => i.sku)).toEqual([
+                expect(search2.items.map((i) => i.sku)).toEqual([
                     'IHD455T1_updated',
                     'IHD455T2_updated',
                     'IHD455T3_updated',
@@ -423,7 +431,7 @@ describe('Default search plugin', () => {
                     groupByProduct: false,
                 });
 
-                expect(search2.items.map(i => i.sku)).toEqual([
+                expect(search2.items.map((i) => i.sku)).toEqual([
                     'IHD455T2_updated',
                     'IHD455T3_updated',
                     'IHD455T4_updated',
@@ -440,7 +448,7 @@ describe('Default search plugin', () => {
                 });
                 await awaitRunningJobs(adminClient);
                 const result = await doAdminSearchQuery({ facetValueIds: ['T_2'], groupByProduct: true });
-                expect(result.search.items.map(i => i.productName)).toEqual([
+                expect(result.search.items.map((i) => i.productName)).toEqual([
                     'Curvy Monitor',
                     'Gaming PC',
                     'Hard Drive',
@@ -451,7 +459,7 @@ describe('Default search plugin', () => {
 
             it('updates index when a Product is deleted', async () => {
                 const { search } = await doAdminSearchQuery({ facetValueIds: ['T_2'], groupByProduct: true });
-                expect(search.items.map(i => i.productId)).toEqual(['T_2', 'T_3', 'T_4', 'T_5', 'T_6']);
+                expect(search.items.map((i) => i.productId)).toEqual(['T_2', 'T_3', 'T_4', 'T_5', 'T_6']);
                 await adminClient.query<DeleteProduct.Mutation, DeleteProduct.Variables>(DELETE_PRODUCT, {
                     id: 'T_5',
                 });
@@ -460,7 +468,7 @@ describe('Default search plugin', () => {
                     facetValueIds: ['T_2'],
                     groupByProduct: true,
                 });
-                expect(search2.items.map(i => i.productId)).toEqual(['T_2', 'T_3', 'T_4', 'T_6']);
+                expect(search2.items.map((i) => i.productId)).toEqual(['T_2', 'T_3', 'T_4', 'T_6']);
             });
 
             it('updates index when a Collection is changed', async () => {
@@ -490,9 +498,11 @@ describe('Default search plugin', () => {
                     },
                 );
                 await awaitRunningJobs(adminClient);
+                // add an additional check for the collection filters to update
+                await awaitRunningJobs(adminClient);
                 const result = await doAdminSearchQuery({ collectionId: 'T_2', groupByProduct: true });
 
-                expect(result.search.items.map(i => i.productName)).toEqual([
+                expect(result.search.items.map((i) => i.productName)).toEqual([
                     'Road Bike',
                     'Skipping Rope',
                     'Boxing Gloves',
@@ -536,11 +546,13 @@ describe('Default search plugin', () => {
                     },
                 });
                 await awaitRunningJobs(adminClient);
+                // add an additional check for the collection filters to update
+                await awaitRunningJobs(adminClient);
                 const result = await doAdminSearchQuery({
                     collectionId: createCollection.id,
                     groupByProduct: true,
                 });
-                expect(result.search.items.map(i => i.productName)).toEqual([
+                expect(result.search.items.map((i) => i.productName)).toEqual([
                     'Instant Camera',
                     'Camera Lens',
                     'Tripod',
@@ -575,8 +587,8 @@ describe('Default search plugin', () => {
                 ]);
             });
 
-            it('updates index when asset focalPoint is changed', async () => {
-                function doSearch() {
+            describe('asset changes', () => {
+                function searchForLaptop() {
                     return adminClient.query<SearchGetAssets.Query, SearchGetAssets.Variables>(
                         SEARCH_GET_ASSETS,
                         {
@@ -587,27 +599,48 @@ describe('Default search plugin', () => {
                         },
                     );
                 }
-                const { search: search1 } = await doSearch();
 
-                expect(search1.items[0].productAsset!.id).toBe('T_1');
-                expect(search1.items[0].productAsset!.focalPoint).toBeNull();
+                it('updates index when asset focalPoint is changed', async () => {
+                    const { search: search1 } = await searchForLaptop();
 
-                await adminClient.query<UpdateAsset.Mutation, UpdateAsset.Variables>(UPDATE_ASSET, {
-                    input: {
-                        id: 'T_1',
-                        focalPoint: {
-                            x: 0.42,
-                            y: 0.42,
+                    expect(search1.items[0].productAsset!.id).toBe('T_1');
+                    expect(search1.items[0].productAsset!.focalPoint).toBeNull();
+
+                    await adminClient.query<UpdateAsset.Mutation, UpdateAsset.Variables>(UPDATE_ASSET, {
+                        input: {
+                            id: 'T_1',
+                            focalPoint: {
+                                x: 0.42,
+                                y: 0.42,
+                            },
                         },
-                    },
+                    });
+
+                    await awaitRunningJobs(adminClient);
+
+                    const { search: search2 } = await searchForLaptop();
+
+                    expect(search2.items[0].productAsset!.id).toBe('T_1');
+                    expect(search2.items[0].productAsset!.focalPoint).toEqual({ x: 0.42, y: 0.42 });
                 });
 
-                await awaitRunningJobs(adminClient);
+                it('updates index when asset deleted', async () => {
+                    const { search: search1 } = await searchForLaptop();
 
-                const { search: search2 } = await doSearch();
+                    const assetId = search1.items[0].productAsset ? .id ;
+                    expect(assetId).toBeTruthy();
 
-                expect(search2.items[0].productAsset!.id).toBe('T_1');
-                expect(search2.items[0].productAsset!.focalPoint).toEqual({ x: 0.42, y: 0.42 });
+                    await adminClient.query<DeleteAsset.Mutation, DeleteAsset.Variables>(DELETE_ASSET, {
+                        id: assetId!,
+                        force: true,
+                    });
+
+                    await awaitRunningJobs(adminClient);
+
+                    const { search: search2 } = await searchForLaptop();
+
+                    expect(search2.items[0].productAsset).toBeNull();
+                });
             });
 
             it('does not include deleted ProductVariants in index', async () => {
@@ -646,7 +679,10 @@ describe('Default search plugin', () => {
                 await adminClient.query<UpdateProductVariants.Mutation, UpdateProductVariants.Variables>(
                     UPDATE_PRODUCT_VARIANTS,
                     {
-                        input: [{ id: 'T_1', enabled: false }, { id: 'T_2', enabled: false }],
+                        input: [
+                            { id: 'T_1', enabled: false },
+                            { id: 'T_2', enabled: false },
+                        ],
                     },
                 );
                 await awaitRunningJobs(adminClient);
@@ -681,6 +717,19 @@ describe('Default search plugin', () => {
                         enabled: false,
                     },
                 });
+                await awaitRunningJobs(adminClient);
+                const result = await doAdminSearchQuery({ groupByProduct: true, take: 3 });
+                expect(result.search.items.map(pick(['productId', 'enabled']))).toEqual([
+                    { productId: 'T_1', enabled: false },
+                    { productId: 'T_2', enabled: true },
+                    { productId: 'T_3', enabled: false },
+                ]);
+            });
+
+            // https://github.com/vendure-ecommerce/vendure/issues/295
+            it('enabled status survives reindex', async () => {
+                await adminClient.query<Reindex.Mutation>(REINDEX);
+
                 await awaitRunningJobs(adminClient);
                 const result = await doAdminSearchQuery({ groupByProduct: true, take: 3 });
                 expect(result.search.items.map(pick(['productId', 'enabled']))).toEqual([
@@ -725,7 +774,7 @@ describe('Default search plugin', () => {
 
                 adminClient.setChannelToken(SECOND_CHANNEL_TOKEN);
                 const { search } = await doAdminSearchQuery({ groupByProduct: true });
-                expect(search.items.map(i => i.productId)).toEqual(['T_1', 'T_2']);
+                expect(search.items.map((i) => i.productId)).toEqual(['T_1', 'T_2']);
             }, 10000);
 
             it('removing product from channel', async () => {
@@ -743,11 +792,19 @@ describe('Default search plugin', () => {
 
                 adminClient.setChannelToken(SECOND_CHANNEL_TOKEN);
                 const { search } = await doAdminSearchQuery({ groupByProduct: true });
-                expect(search.items.map(i => i.productId)).toEqual(['T_1']);
+                expect(search.items.map((i) => i.productId)).toEqual(['T_1']);
             }, 10000);
         });
     });
 });
+
+export const REINDEX = gql`
+    mutation Reindex {
+        reindex {
+            id
+        }
+    }
+`;
 
 export const SEARCH_PRODUCTS = gql`
     query SearchProductsAdmin($input: SearchInput!) {

@@ -13,8 +13,12 @@ import { unique } from '@vendure/common/lib/unique';
 import { Connection } from 'typeorm';
 
 import { RequestContext } from '../../api/common/request-context';
-import { DEFAULT_LANGUAGE_CODE } from '../../common/constants';
-import { ChannelNotFoundError, EntityNotFoundError, InternalServerError } from '../../common/error/errors';
+import {
+    ChannelNotFoundError,
+    EntityNotFoundError,
+    InternalServerError,
+    UserInputError,
+} from '../../common/error/errors';
 import { ChannelAware } from '../../common/types/common-types';
 import { assertFound, idsAreEqual } from '../../common/utils';
 import { ConfigService } from '../../config/config.service';
@@ -25,11 +29,17 @@ import { Zone } from '../../entity/zone/zone.entity';
 import { getEntityOrThrow } from '../helpers/utils/get-entity-or-throw';
 import { patchEntity } from '../helpers/utils/patch-entity';
 
+import { GlobalSettingsService } from './global-settings.service';
+
 @Injectable()
 export class ChannelService {
     private allChannels: Channel[] = [];
 
-    constructor(@InjectConnection() private connection: Connection, private configService: ConfigService) {}
+    constructor(
+        @InjectConnection() private connection: Connection,
+        private configService: ConfigService,
+        private globalSettingsService: GlobalSettingsService,
+    ) {}
 
     /**
      * When the app is bootstrapped, ensure a default Channel exists and populate the
@@ -46,7 +56,7 @@ export class ChannelService {
      */
     assignToCurrentChannel<T extends ChannelAware>(entity: T, ctx: RequestContext): T {
         const channelIds = unique([ctx.channelId, this.getDefaultChannel().id]);
-        entity.channels = channelIds.map(id => ({ id })) as any;
+        entity.channels = channelIds.map((id) => ({ id })) as any;
         return entity;
     }
 
@@ -81,7 +91,7 @@ export class ChannelService {
             relations: ['channels'],
         });
         for (const id of channelIds) {
-            entity.channels = entity.channels.filter(c => !idsAreEqual(c.id, id));
+            entity.channels = entity.channels.filter((c) => !idsAreEqual(c.id, id));
         }
         await this.connection.getRepository(entityType).save(entity as any, { reload: false });
         return entity;
@@ -95,7 +105,7 @@ export class ChannelService {
             // there is only the default channel, so return it
             return this.getDefaultChannel();
         }
-        const channel = this.allChannels.find(c => c.token === token);
+        const channel = this.allChannels.find((c) => c.token === token);
         if (!channel) {
             throw new ChannelNotFoundError(token);
         }
@@ -106,7 +116,7 @@ export class ChannelService {
      * Returns the default Channel.
      */
     getDefaultChannel(): Channel {
-        const defaultChannel = this.allChannels.find(channel => channel.code === DEFAULT_CHANNEL_CODE);
+        const defaultChannel = this.allChannels.find((channel) => channel.code === DEFAULT_CHANNEL_CODE);
 
         if (!defaultChannel) {
             throw new InternalServerError(`error.default-channel-not-found`);
@@ -147,6 +157,16 @@ export class ChannelService {
         const channel = await this.findOne(input.id);
         if (!channel) {
             throw new EntityNotFoundError('Channel', input.id);
+        }
+        if (input.defaultLanguageCode) {
+            const availableLanguageCodes = await this.globalSettingsService
+                .getSettings()
+                .then((s) => s.availableLanguages);
+            if (!availableLanguageCodes.includes(input.defaultLanguageCode)) {
+                throw new UserInputError('error.language-not-available-in-global-settings', {
+                    code: input.defaultLanguageCode,
+                });
+            }
         }
         const updatedChannel = patchEntity(channel, input);
         if (input.defaultTaxZoneId) {
@@ -194,7 +214,7 @@ export class ChannelService {
         if (!defaultChannel) {
             const newDefaultChannel = new Channel({
                 code: DEFAULT_CHANNEL_CODE,
-                defaultLanguageCode: DEFAULT_LANGUAGE_CODE,
+                defaultLanguageCode: this.configService.defaultLanguageCode,
                 pricesIncludeTax: false,
                 currencyCode: CurrencyCode.USD,
                 token: defaultChannelToken,

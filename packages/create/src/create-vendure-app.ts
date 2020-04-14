@@ -8,6 +8,7 @@ import os from 'os';
 import path from 'path';
 import { Observable } from 'rxjs';
 
+import { REQUIRED_NODE_VERSION, SERVER_PORT } from './constants';
 import { gatherCiUserResponses, gatherUserResponses } from './gather-user-responses';
 import {
     checkDbConnection,
@@ -16,13 +17,13 @@ import {
     getDependencies,
     installPackages,
     isSafeToCreateProjectIn,
+    isServerPortInUse,
     shouldUseYarn,
 } from './helpers';
 import { CliLogLevel } from './types';
 
 // tslint:disable-next-line:no-var-requires
 const packageJson = require('../package.json');
-const REQUIRED_NODE_VERSION = '>=8.9.0';
 checkNodeVersion(REQUIRED_NODE_VERSION);
 
 let projectName: string | undefined;
@@ -42,7 +43,7 @@ program
     })
     .option(
         '--log-level <logLevel>',
-        "Log level, either 'silent', 'info', or 'verbose'",
+        'Log level, either \'silent\', \'info\', or \'verbose\'',
         /^(silent|info|verbose)$/i,
         'silent',
     )
@@ -60,6 +61,10 @@ async function createApp(
 ) {
     if (!runPreChecks(name, useNpm)) {
         return;
+    }
+    if (await isServerPortInUse()) {
+        console.log(chalk.red(`Port ${SERVER_PORT} is in use. Please make it available and then re-try.`));
+        process.exit(1);
     }
 
     console.log(`Welcome to @vendure/create v${packageJson.version}!`);
@@ -94,7 +99,7 @@ async function createApp(
         scripts: {
             'run:server': usingTs ? 'ts-node ./src/index.ts' : 'node ./src/index.js',
             'run:worker': usingTs ? 'ts-node ./src/index-worker.ts' : 'node ./src/index-worker.js',
-            start: useYarn ? 'concurrently yarn:run:*' : 'concurrently npm:run:*',
+            'start': useYarn ? 'concurrently yarn:run:*' : 'concurrently npm:run:*',
             ...(usingTs ? { build: 'tsc' } : undefined),
             'migration:generate': usingTs ? 'ts-node migration generate' : 'node migration generate',
             'migration:run': usingTs ? 'ts-node migration run' : 'node migration run',
@@ -128,7 +133,7 @@ async function createApp(
                         .then(() => {
                             if (devDependencies.length) {
                                 subscriber.next(`Installing ${devDependencies.join(', ')}`);
-                                return installPackages(root, useYarn, devDependencies, true, logLevel);
+                                return installPackages(root, useYarn, devDependencies, true, logLevel, isCi);
                             }
                         })
                         .then(() => subscriber.complete())
@@ -187,10 +192,10 @@ async function createApp(
                         require(path.join(root, 'node_modules/ts-node')).register();
                     }
                     const { populate } = await import(
-                        path.join(root, 'node_modules/@vendure/core/cli/populate')
+                        path.join(root, 'node_modules/@vendure/core/cli/populate'),
                     );
                     const { bootstrap, DefaultLogger, LogLevel } = await import(
-                        path.join(root, 'node_modules/@vendure/core/dist/index')
+                        path.join(root, 'node_modules/@vendure/core/dist/index'),
                     );
                     const { config } = await import(ctx.configFile);
                     const assetsDir = path.join(__dirname, '../assets');
