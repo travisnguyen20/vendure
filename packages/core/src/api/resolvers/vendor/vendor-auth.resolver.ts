@@ -15,7 +15,7 @@ import { Ctx } from '../../decorators/request-context.decorator';
 import { BaseAuthResolver } from '../base/base-auth.resolver';
 
 @Resolver()
-export class AuthResolver extends BaseAuthResolver {
+export class VendorAuthResolver extends BaseAuthResolver {
     constructor(
         authService: AuthService,
         userService: UserService,
@@ -34,7 +34,7 @@ export class AuthResolver extends BaseAuthResolver {
         @Context('req') req: Request,
         @Context('res') res: Response,
     ): Promise<LoginResult> {
-        return super.login(args, ctx, req, res, 'admin');
+        return super.login(args, ctx, req, res, 'vendor');
     }
 
     @Mutation()
@@ -50,6 +50,6 @@ export class AuthResolver extends BaseAuthResolver {
     @Query()
     @Allow(Permission.Authenticated, Permission.Owner)
     me(@Ctx() ctx: RequestContext) {
-        return super.me(ctx, 'admin');
+        return super.me(ctx, 'vendor');
     }
 }

@@ -39,6 +39,12 @@ export interface VendurePluginMetadata extends ModuleMetadata {
     adminApiExtensions?: APIExtensionDefinition;
     /**
      * @description
+     * The plugin may extend the default Vendure GraphQL vendor api by providing extended
+     * schema definitions and any required resolvers.
+     */
+    vendorApiExtensions?: APIExtensionDefinition;
+    /**
+     * @description
      * The plugin may define [Nestjs microservice controllers](https://docs.nestjs.com/microservices/basics#request-response)
      * which are run in the Worker context.
      */

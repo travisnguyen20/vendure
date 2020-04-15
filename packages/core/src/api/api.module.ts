@@ -5,7 +5,7 @@ import path from 'path';
 import { DataImportModule } from '../data-import/data-import.module';
 import { ServiceModule } from '../service/service.module';
 
-import { AdminApiModule, ApiSharedModule, ShopApiModule } from './api-internal-modules';
+import { AdminApiModule, ApiSharedModule, ShopApiModule, VendorApiModule } from './api-internal-modules';
 import { RequestContextService } from './common/request-context.service';
 import { configureGraphQLModule } from './config/configure-graphql-module';
 import { AuthGuard } from './middleware/auth-guard';
@@ -25,21 +25,30 @@ import { ValidateCustomFieldsInterceptor } from './middleware/validate-custom-fi
         ApiSharedModule,
         AdminApiModule,
         ShopApiModule,
-        configureGraphQLModule(configService => ({
+        VendorApiModule,
+        configureGraphQLModule((configService) => ({
             apiType: 'shop',
             apiPath: configService.shopApiPath,
-            typePaths: ['type', 'shop-api', 'common'].map(p =>
+            typePaths: ['type', 'shop-api', 'common'].map((p) =>
                 path.join(__dirname, 'schema', p, '*.graphql'),
             ),
             resolverModule: ShopApiModule,
         })),
-        configureGraphQLModule(configService => ({
+        configureGraphQLModule((configService) => ({
             apiType: 'admin',
             apiPath: configService.adminApiPath,
-            typePaths: ['type', 'admin-api', 'common'].map(p =>
+            typePaths: ['type', 'admin-api', 'common'].map((p) =>
                 path.join(__dirname, 'schema', p, '*.graphql'),
             ),
             resolverModule: AdminApiModule,
+        })),
+        configureGraphQLModule((configService) => ({
+            apiType: 'vendor',
+            apiPath: configService.vendorApiPath,
+            typePaths: ['type', 'vendor-api', 'common'].map((p) =>
+                path.join(__dirname, 'schema', p, '*.graphql'),
+            ),
+            resolverModule: VendorApiModule,
         })),
     ],
     providers: [

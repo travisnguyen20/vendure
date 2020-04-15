@@ -47,6 +47,7 @@ import { StockMovement } from './stock-movement/stock-movement.entity';
 import { TaxCategory } from './tax-category/tax-category.entity';
 import { TaxRate } from './tax-rate/tax-rate.entity';
 import { User } from './user/user.entity';
+import { Vendor } from './vendor/vendor.entity';
 import { Zone } from './zone/zone.entity';
 
 /**
@@ -55,6 +56,7 @@ import { Zone } from './zone/zone.entity';
 export const coreEntitiesMap = {
     Address,
     Administrator,
+    Vendor,
     AnonymousSession,
     Asset,
     AuthenticatedSession,

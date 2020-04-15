@@ -14,6 +14,7 @@ import { getUserChannelsPermissions } from '../../../service/helpers/utils/get-u
 import { AdministratorService } from '../../../service/services/administrator.service';
 import { AuthService } from '../../../service/services/auth.service';
 import { UserService } from '../../../service/services/user.service';
+import { VendorService } from '../../../service/services/vendor.service';
 import { extractAuthToken } from '../../common/extract-auth-token';
 import { ApiType } from '../../common/get-api-type';
 import { RequestContext } from '../../common/request-context';
@@ -24,6 +25,7 @@ export class BaseAuthResolver {
         protected authService: AuthService,
         protected userService: UserService,
         protected administratorService: AdministratorService,
+        protected vendorService: VendorService,
         protected configService: ConfigService,
     ) {}
 
@@ -71,6 +73,12 @@ export class BaseAuthResolver {
                 throw new ForbiddenError();
             }
         }
+        if (apiType === 'vendor') {
+            const vendor = await this.vendorService.findOneByUserId(userId);
+            if (!vendor) {
+                throw new ForbiddenError();
+            }
+        }
         const user = userId && (await this.userService.getUserById(userId));
         return user ? this.publiclyAccessibleUser(user) : null;
     }
@@ -89,6 +97,12 @@ export class BaseAuthResolver {
         if (apiType && apiType === 'admin') {
             const administrator = await this.administratorService.findOneByUserId(session.user.id);
             if (!administrator) {
+                throw new UnauthorizedError();
+            }
+        }
+        if (apiType && apiType === 'vendor') {
+            const vendor = await this.vendorService.findOneByUserId(session.user.id);
+            if (!vendor) {
                 throw new UnauthorizedError();
             }
         }

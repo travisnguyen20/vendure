@@ -640,9 +640,9 @@ export enum CurrencyCode {
   /** Canadian dollar */
   CAD = 'CAD',
   /** Congolese franc */
-  CHE = 'CHE',
+  CDF = 'CDF',
   /** Swiss franc */
-  CHW = 'CHW',
+  CHF = 'CHF',
   /** Chilean peso */
   CLP = 'CLP',
   /** Renminbi (Chinese) yuan */
@@ -2544,12 +2544,14 @@ export enum Permission {
   CreateOrder = 'CreateOrder',
   CreatePromotion = 'CreatePromotion',
   CreateSettings = 'CreateSettings',
+  CreateVendor = 'CreateVendor',
   DeleteAdministrator = 'DeleteAdministrator',
   DeleteCatalog = 'DeleteCatalog',
   DeleteCustomer = 'DeleteCustomer',
   DeleteOrder = 'DeleteOrder',
   DeletePromotion = 'DeletePromotion',
   DeleteSettings = 'DeleteSettings',
+  DeleteVendor = 'DeleteVendor',
   /**  Owner means the user owns this entity, e.g. a Customer's own Order */
   Owner = 'Owner',
   /**  Public means any unauthenticated user may perform the operation  */
@@ -2560,6 +2562,7 @@ export enum Permission {
   ReadOrder = 'ReadOrder',
   ReadPromotion = 'ReadPromotion',
   ReadSettings = 'ReadSettings',
+  ReadVendor = 'ReadVendor',
   /**  SuperAdmin can perform the most sensitive tasks */
   SuperAdmin = 'SuperAdmin',
   UpdateAdministrator = 'UpdateAdministrator',
@@ -2567,7 +2570,8 @@ export enum Permission {
   UpdateCustomer = 'UpdateCustomer',
   UpdateOrder = 'UpdateOrder',
   UpdatePromotion = 'UpdatePromotion',
-  UpdateSettings = 'UpdateSettings'
+  UpdateSettings = 'UpdateSettings',
+  UpdateVendor = 'UpdateVendor'
 }
 
 /** The price range where the result has more than one price */
@@ -3693,6 +3697,23 @@ export type UserStatusInput = {
   loginTime: Scalars['String'];
   activeChannelId: Scalars['ID'];
   channels: Array<CurrentUserChannelInput>;
+};
+
+export type Vendor = Node & {
+   __typename?: 'Vendor';
+  id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  emailAddress: Scalars['String'];
+  user: User;
+};
+
+export type VendorList = PaginatedList & {
+   __typename?: 'VendorList';
+  items: Array<Vendor>;
+  totalItems: Scalars['Int'];
 };
 
 export type Zone = Node & {

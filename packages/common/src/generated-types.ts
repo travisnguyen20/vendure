@@ -639,9 +639,9 @@ export enum CurrencyCode {
   /** Canadian dollar */
   CAD = 'CAD',
   /** Congolese franc */
-  CHE = 'CHE',
+  CDF = 'CDF',
   /** Swiss franc */
-  CHW = 'CHW',
+  CHF = 'CHF',
   /** Chilean peso */
   CLP = 'CLP',
   /** Renminbi (Chinese) yuan */
@@ -2516,6 +2516,10 @@ export enum Permission {
   ReadAdministrator = 'ReadAdministrator',
   UpdateAdministrator = 'UpdateAdministrator',
   DeleteAdministrator = 'DeleteAdministrator',
+  CreateVendor = 'CreateVendor',
+  ReadVendor = 'ReadVendor',
+  UpdateVendor = 'UpdateVendor',
+  DeleteVendor = 'DeleteVendor',
   CreateOrder = 'CreateOrder',
   ReadOrder = 'ReadOrder',
   UpdateOrder = 'UpdateOrder',
@@ -3628,6 +3632,23 @@ export type User = Node & {
   roles: Array<Role>;
   lastLogin?: Maybe<Scalars['String']>;
   customFields?: Maybe<Scalars['JSON']>;
+};
+
+export type Vendor = Node & {
+   __typename?: 'Vendor';
+  id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  emailAddress: Scalars['String'];
+  user: User;
+};
+
+export type VendorList = PaginatedList & {
+   __typename?: 'VendorList';
+  items: Array<Vendor>;
+  totalItems: Scalars['Int'];
 };
 
 export type Zone = Node & {

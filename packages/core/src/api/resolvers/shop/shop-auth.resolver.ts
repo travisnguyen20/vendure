@@ -24,6 +24,7 @@ import { AdministratorService } from '../../../service/services/administrator.se
 import { AuthService } from '../../../service/services/auth.service';
 import { CustomerService } from '../../../service/services/customer.service';
 import { UserService } from '../../../service/services/user.service';
+import { VendorService } from '../../../service/services/vendor.service';
 import { RequestContext } from '../../common/request-context';
 import { Allow } from '../../decorators/allow.decorator';
 import { Ctx } from '../../decorators/request-context.decorator';
@@ -37,8 +38,9 @@ export class ShopAuthResolver extends BaseAuthResolver {
         administratorService: AdministratorService,
         configService: ConfigService,
         protected customerService: CustomerService,
+        vendorService: VendorService,
     ) {
-        super(authService, userService, administratorService, configService);
+        super(authService, userService, administratorService, vendorService, configService);
     }
 
     @Mutation()

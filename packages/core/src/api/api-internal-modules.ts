@@ -52,6 +52,8 @@ import { ShopCustomerResolver } from './resolvers/shop/shop-customer.resolver';
 import { ShopEnvironmentResolver } from './resolvers/shop/shop-environment.resolver';
 import { ShopOrderResolver } from './resolvers/shop/shop-order.resolver';
 import { ShopProductsResolver } from './resolvers/shop/shop-products.resolver';
+import { VendorAuthResolver } from './resolvers/vendor/vendor-auth.resolver';
+import { VendorResolver } from './resolvers/vendor/vendor.resolver';
 
 const adminResolvers = [
     AdministratorResolver,
@@ -78,6 +80,8 @@ const adminResolvers = [
     TaxRateResolver,
     ZoneResolver,
 ];
+
+const vendorResolvers = [VendorResolver, VendorAuthResolver];
 
 const shopResolvers = [
     ShopAuthResolver,
@@ -139,3 +143,13 @@ export class AdminApiModule {}
     exports: [...shopResolvers],
 })
 export class ShopApiModule {}
+
+/**
+ * The internal module containing the Vendor GraphQL API resolvers
+ */
+@Module({
+    imports: [ApiSharedModule, ServiceModule.forRoot(), ...createDynamicGraphQlModulesForPlugins('vendor')],
+    providers: [...vendorResolvers, ...entityResolvers],
+    exports: [...vendorResolvers],
+})
+export class VendorApiModule {}

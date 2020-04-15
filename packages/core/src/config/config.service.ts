@@ -56,6 +56,10 @@ export class ConfigService implements VendureConfig {
         return this.activeConfig.adminApiPath;
     }
 
+    get vendorApiPath(): string {
+        return this.activeConfig.vendorApiPath;
+    }
+
     get shopApiPath(): string {
         return this.activeConfig.shopApiPath;
     }

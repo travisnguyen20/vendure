@@ -12,9 +12,9 @@ const dynamicApiModuleClassMap: { [name: string]: Type<any> } = {};
  * This function dynamically creates a Nest module to house any GraphQL resolvers defined by
  * any configured plugins.
  */
-export function createDynamicGraphQlModulesForPlugins(apiType: 'shop' | 'admin'): DynamicModule[] {
+export function createDynamicGraphQlModulesForPlugins(apiType: 'shop' | 'admin' | 'vendor'): DynamicModule[] {
     return getConfig()
-        .plugins.map(plugin => {
+        .plugins.map((plugin) => {
             const pluginModule = isDynamicModule(plugin) ? plugin.module : plugin;
             const resolvers = graphQLResolversFor(plugin, apiType) || [];
 
@@ -36,9 +36,9 @@ export function createDynamicGraphQlModulesForPlugins(apiType: 'shop' | 'admin')
 /**
  * This function retrieves any dynamic modules which were created with createDynamicGraphQlModulesForPlugins.
  */
-export function getDynamicGraphQlModulesForPlugins(apiType: 'shop' | 'admin'): Array<Type<any>> {
+export function getDynamicGraphQlModulesForPlugins(apiType: 'shop' | 'admin' | 'vendor'): Array<Type<any>> {
     return getConfig()
-        .plugins.map(plugin => {
+        .plugins.map((plugin) => {
             const pluginModule = isDynamicModule(plugin) ? plugin.module : plugin;
             const resolvers = graphQLResolversFor(plugin, apiType) || [];
 
@@ -48,6 +48,11 @@ export function getDynamicGraphQlModulesForPlugins(apiType: 'shop' | 'admin'): A
         .filter(notNullOrUndefined);
 }
 
-function dynamicClassName(module: Type<any>, apiType: 'shop' | 'admin'): string {
-    return module.name + `Dynamic` + (apiType === 'shop' ? 'Shop' : 'Admin') + 'Module';
+function dynamicClassName(module: Type<any>, apiType: 'shop' | 'admin' | 'vendor'): string {
+    return (
+        module.name +
+        `Dynamic` +
+        (apiType === 'shop' ? 'Shop' : apiType === 'vendor' ? 'Vendor' : 'Admin') +
+        'Module'
+    );
 }

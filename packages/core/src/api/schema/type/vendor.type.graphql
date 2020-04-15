@@ -1,0 +1,14 @@
+type Vendor implements Node {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    firstName: String!
+    lastName: String!
+    emailAddress: String!
+    user: User!
+}
+
+type VendorList implements PaginatedList {
+    items: [Vendor!]!
+    totalItems: Int!
+}

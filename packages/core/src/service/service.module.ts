@@ -48,6 +48,7 @@ import { StockMovementService } from './services/stock-movement.service';
 import { TaxCategoryService } from './services/tax-category.service';
 import { TaxRateService } from './services/tax-rate.service';
 import { UserService } from './services/user.service';
+import { VendorService } from './services/vendor.service';
 import { ZoneService } from './services/zone.service';
 
 const services = [
@@ -78,6 +79,7 @@ const services = [
     TaxCategoryService,
     TaxRateService,
     UserService,
+    VendorService,
     ZoneService,
 ];
 

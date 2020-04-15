@@ -20,7 +20,7 @@ import { deleteGeneratedDocs, generateFrontMatter } from './docgen-utils';
 
 // tslint:disable:no-console
 
-type TargetApi = 'shop' | 'admin';
+type TargetApi = 'shop' | 'admin' | 'vendor';
 
 const targetApi: TargetApi = getTargetApiFromArgs();
 

@@ -194,7 +194,7 @@ export async function getAllEntities(userConfig: Partial<VendureConfig>): Promis
     // Check to ensure that no plugins are defining entities with names
     // which conflict with existing entities.
     for (const pluginEntity of pluginEntities) {
-        if (allEntities.find(e => e.name === pluginEntity.name)) {
+        if (allEntities.find((e) => e.name === pluginEntity.name)) {
             throw new InternalServerError(`error.entity-name-conflict`, { entityName: pluginEntity.name });
         } else {
             allEntities.push(pluginEntity);
@@ -219,7 +219,7 @@ function setExposedHeaders(config: ReadOnlyRequired<VendureConfig>) {
             } else if (typeof exposedHeaders === 'string') {
                 exposedHeadersWithAuthKey = exposedHeaders
                     .split(',')
-                    .map(x => x.trim())
+                    .map((x) => x.trim())
                     .concat(authTokenHeaderKey);
             } else {
                 exposedHeadersWithAuthKey = exposedHeaders.concat(authTokenHeaderKey);
@@ -268,6 +268,7 @@ function logWelcomeMessage(config: VendureConfig) {
     Logger.info(`Vendure server (v${version}) now running on port ${config.port}`);
     Logger.info(`Shop API: http://localhost:${config.port}/${config.shopApiPath}`);
     Logger.info(`Admin API: http://localhost:${config.port}/${config.adminApiPath}`);
+    Logger.info(`Vendor API: http://localhost:${config.port}/${config.vendorApiPath}`);
     logProxyMiddlewares(config);
     Logger.info(`=================================================`);
 }

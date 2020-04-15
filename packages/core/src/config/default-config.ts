@@ -49,6 +49,7 @@ export const defaultConfig: RuntimeVendureConfig = {
     },
     adminApiPath: 'admin-api',
     shopApiPath: 'shop-api',
+    vendorApiPath: 'vendor-api',
     entityIdStrategy: new AutoIncrementIdStrategy(),
     assetOptions: {
         assetNamingStrategy: new DefaultAssetNamingStrategy(),

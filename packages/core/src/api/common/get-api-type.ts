@@ -6,7 +6,7 @@ import { GraphQLResolveInfo } from 'graphql';
  *
  * @docsCategory request
  */
-export type ApiType = 'admin' | 'shop' | 'custom';
+export type ApiType = 'admin' | 'shop' | 'vendor' | 'custom';
 
 /**
  * Inspects the GraphQL "info" resolver argument to determine which API
@@ -15,7 +15,7 @@ export type ApiType = 'admin' | 'shop' | 'custom';
 export function getApiType(info?: GraphQLResolveInfo): ApiType {
     const query = info && info.schema.getQueryType();
     if (query) {
-        return !!query.getFields().administrators ? 'admin' : 'shop';
+        return !!query.getFields().administrators ? 'admin' : query.getFields().vendors ? 'vendor' : 'shop';
     }
     return 'custom';
 }

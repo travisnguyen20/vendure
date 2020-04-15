@@ -120,6 +120,9 @@ const result: IntrospectionResultData = {
                     {
                         name: 'ProductOptionGroup',
                     },
+                    {
+                        name: 'Vendor',
+                    },
                 ],
             },
             {
@@ -173,6 +176,9 @@ const result: IntrospectionResultData = {
                     },
                     {
                         name: 'TaxRateList',
+                    },
+                    {
+                        name: 'VendorList',
                     },
                 ],
             },

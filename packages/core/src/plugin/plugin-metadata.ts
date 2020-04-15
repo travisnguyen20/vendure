@@ -10,6 +10,7 @@ export const PLUGIN_METADATA = {
     CONFIGURATION: 'configuration',
     SHOP_API_EXTENSIONS: 'shopApiExtensions',
     ADMIN_API_EXTENSIONS: 'adminApiExtensions',
+    VENDOR_API_EXTENSIONS: 'vendorApiExtensions',
     WORKERS: 'workers',
     ENTITIES: 'entities',
 };
@@ -19,7 +20,7 @@ export function getEntitiesFromPlugins(plugins?: Array<Type<any> | DynamicModule
         return [];
     }
     return plugins
-        .map(p => reflectMetadata(p, PLUGIN_METADATA.ENTITIES))
+        .map((p) => reflectMetadata(p, PLUGIN_METADATA.ENTITIES))
         .reduce((all, entities) => [...all, ...(entities || [])], []);
 }
 
@@ -34,18 +35,20 @@ export function getModuleMetadata(module: Type<any>) {
 
 export function getPluginAPIExtensions(
     plugins: Array<Type<any> | DynamicModule>,
-    apiType: 'shop' | 'admin',
+    apiType: 'shop' | 'admin' | 'vendor',
 ): APIExtensionDefinition[] {
     const extensions =
         apiType === 'shop'
-            ? plugins.map(p => reflectMetadata(p, PLUGIN_METADATA.SHOP_API_EXTENSIONS))
-            : plugins.map(p => reflectMetadata(p, PLUGIN_METADATA.ADMIN_API_EXTENSIONS));
+            ? plugins.map((p) => reflectMetadata(p, PLUGIN_METADATA.SHOP_API_EXTENSIONS))
+            : apiType === 'vendor'
+            ? plugins.map((p) => reflectMetadata(p, PLUGIN_METADATA.VENDOR_API_EXTENSIONS))
+            : plugins.map((p) => reflectMetadata(p, PLUGIN_METADATA.ADMIN_API_EXTENSIONS));
 
     return extensions.filter(notNullOrUndefined);
 }
 
 export function getPluginModules(plugins: Array<Type<any> | DynamicModule>): Array<Type<any>> {
-    return plugins.map(p => (isDynamicModule(p) ? p.module : p));
+    return plugins.map((p) => (isDynamicModule(p) ? p.module : p));
 }
 
 export function hasLifecycleMethod<M extends keyof PluginLifecycleMethods>(
@@ -67,11 +70,13 @@ export function getConfigurationFunction(
 
 export function graphQLResolversFor(
     plugin: Type<any> | DynamicModule,
-    apiType: 'shop' | 'admin',
+    apiType: 'shop' | 'admin' | 'vendor',
 ): Array<Type<any>> {
     const apiExtensions: APIExtensionDefinition =
         apiType === 'shop'
             ? reflectMetadata(plugin, PLUGIN_METADATA.SHOP_API_EXTENSIONS)
+            : apiType === 'vendor'
+            ? reflectMetadata(plugin, PLUGIN_METADATA.VENDOR_API_EXTENSIONS)
             : reflectMetadata(plugin, PLUGIN_METADATA.ADMIN_API_EXTENSIONS);
 
     return apiExtensions

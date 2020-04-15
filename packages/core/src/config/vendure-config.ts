@@ -424,6 +424,13 @@ export interface VendureConfig {
      * @description
      * The path to the admin GraphQL API.
      *
+     * @default 'vendor-api'
+     */
+    vendorApiPath?: string;
+    /**
+     * @description
+     * The path to the admin GraphQL API.
+     *
      * @default 'shop-api'
      */
     shopApiPath?: string;

@@ -30,6 +30,11 @@ enum Permission {
     UpdateAdministrator
     DeleteAdministrator
 
+    CreateVendor
+    ReadVendor
+    UpdateVendor
+    DeleteVendor
+
     CreateOrder
     ReadOrder
     UpdateOrder

@@ -28,7 +28,7 @@ import {
 } from './graphql-custom-fields';
 
 export interface GraphQLApiOptions {
-    apiType: 'shop' | 'admin';
+    apiType: 'shop' | 'admin' | 'vendor';
     typePaths: string[];
     apiPath: string;
     // tslint:disable-next-line:ban-types
@@ -156,19 +156,20 @@ async function createGraphQLOptions(
      * 2. any custom fields defined in the config
      * 3. any schema extensions defined by plugins
      */
-    async function createTypeDefs(apiType: 'shop' | 'admin'): Promise<string> {
+    async function createTypeDefs(apiType: 'shop' | 'admin' | 'vendor'): Promise<string> {
         const customFields = configService.customFields;
         // Paths must be normalized to use forward-slash separators.
         // See https://github.com/nestjs/graphql/issues/336
-        const normalizedPaths = options.typePaths.map(p => p.split(path.sep).join('/'));
+        const normalizedPaths = options.typePaths.map((p) => p.split(path.sep).join('/'));
         const typeDefs = await typesLoader.mergeTypesByPaths(normalizedPaths);
         let schema = buildSchema(typeDefs);
 
         getPluginAPIExtensions(configService.plugins, apiType)
-            .map(e => (typeof e.schema === 'function' ? e.schema() : e.schema))
+            .map((e) => (typeof e.schema === 'function' ? e.schema() : e.schema))
             .filter(notNullOrUndefined)
-            .forEach(documentNode => (schema = extendSchema(schema, documentNode)));
+            .forEach((documentNode) => (schema = extendSchema(schema, documentNode)));
         schema = generateListOptions(schema);
+        // TODO TUNGNT to check it after add new vendor api
         schema = addGraphQLCustomFields(schema, customFields, apiType === 'shop');
         schema = addServerConfigCustomFields(schema, customFields);
         schema = addOrderLineCustomFieldsInput(schema, customFields.OrderLine || []);
