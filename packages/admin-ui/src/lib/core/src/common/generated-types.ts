@@ -2599,6 +2599,8 @@ export type Product = Node & {
   facetValues: Array<FacetValue>;
   translations: Array<ProductTranslation>;
   collections: Array<Collection>;
+  globalProduct?: Maybe<Product>;
+  vendor?: Maybe<Vendor>;
   customFields?: Maybe<Scalars['JSON']>;
 };
 
@@ -3708,6 +3710,7 @@ export type Vendor = Node & {
   lastName: Scalars['String'];
   emailAddress: Scalars['String'];
   user: User;
+  products: Array<Product>;
 };
 
 export type VendorList = PaginatedList & {

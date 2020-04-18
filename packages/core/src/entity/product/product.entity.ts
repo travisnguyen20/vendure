@@ -1,5 +1,5 @@
 import { DeepPartial } from '@vendure/common/lib/shared-types';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 
 import { ChannelAware, SoftDeletable } from '../../common/types/common-types';
 import { LocaleString, Translatable, Translation } from '../../common/types/locale-types';
@@ -11,6 +11,7 @@ import { CustomProductFields } from '../custom-entity-fields';
 import { FacetValue } from '../facet-value/facet-value.entity';
 import { ProductOptionGroup } from '../product-option-group/product-option-group.entity';
 import { ProductVariant } from '../product-variant/product-variant.entity';
+import { Vendor } from '../vendor/vendor.entity';
 
 import { ProductAsset } from './product-asset.entity';
 import { ProductTranslation } from './product-translation.entity';
@@ -66,4 +67,11 @@ export class Product extends VendureEntity
     @ManyToMany((type) => Channel)
     @JoinTable()
     channels: Channel[];
+
+    @OneToOne(type => Product)
+    @JoinColumn()
+    globalProduct: Product;
+
+    @ManyToOne(type => Vendor, vendor => vendor.products,  { onDelete: 'SET NULL', eager: true })
+    vendor: Vendor;
 }

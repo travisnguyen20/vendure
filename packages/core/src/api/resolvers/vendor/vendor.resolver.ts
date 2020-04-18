@@ -19,7 +19,7 @@ export class VendorResolver {
 
     @Query()
     @Allow(Permission.ReadVendor)
-    Vendors(@Args() args: QueryVendorsArgs): Promise<PaginatedList<Vendor>> {
+    vendors(@Args() args: QueryVendorsArgs): Promise<PaginatedList<Vendor>> {
         return this.vendorService.findAll(args.options || undefined);
     }
 

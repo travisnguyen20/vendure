@@ -6,6 +6,7 @@ type Vendor implements Node {
     lastName: String!
     emailAddress: String!
     user: User!
+    products: [Product!]!
 }
 
 type VendorList implements PaginatedList {

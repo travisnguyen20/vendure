@@ -13,6 +13,8 @@ type Product implements Node {
     facetValues: [FacetValue!]!
     translations: [ProductTranslation!]!
     collections: [Collection!]!
+    globalProduct: Product
+    vendor: Vendor
 }
 
 type ProductTranslation {

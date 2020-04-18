@@ -1,7 +1,8 @@
 import { DeepPartial } from '@vendure/common/lib/shared-types';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 import { VendureEntity } from '../base/base.entity';
+import { Product } from '../product/product.entity';
 import { User } from '../user/user.entity';
 
 /**
@@ -26,4 +27,7 @@ export class Vendor extends VendureEntity {
     @OneToOne((type) => User)
     @JoinColumn()
     user: User;
+
+    @OneToMany((type) => Product, (product) => product.vendor)
+    products: Product[];
 }
