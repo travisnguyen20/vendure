@@ -149,6 +149,13 @@ export interface AdminUiConfig {
     adminApiPath: string;
     /**
      * @description
+     * The path to the GraphQL Admin API.
+     *
+     * @default 'vendor-api'
+     */
+    vendorApiPath: string;
+    /**
+     * @description
      * Whether to use cookies or bearer tokens to track sessions.
      * Should match the setting of in the server's `tokenMethod` config
      * option.

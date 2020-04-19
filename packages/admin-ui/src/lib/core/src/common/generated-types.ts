@@ -22,49 +22,49 @@ export type AddNoteToOrderInput = {
 
 export type Address = Node & {
    __typename?: 'Address';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  fullName?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
   company?: Maybe<Scalars['String']>;
+  country: Country;
+  createdAt: Scalars['DateTime'];
+  customFields?: Maybe<Scalars['JSON']>;
+  defaultBillingAddress?: Maybe<Scalars['Boolean']>;
+  defaultShippingAddress?: Maybe<Scalars['Boolean']>;
+  fullName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  phoneNumber?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
   streetLine1: Scalars['String'];
   streetLine2?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  province?: Maybe<Scalars['String']>;
-  postalCode?: Maybe<Scalars['String']>;
-  country: Country;
-  phoneNumber?: Maybe<Scalars['String']>;
-  defaultShippingAddress?: Maybe<Scalars['Boolean']>;
-  defaultBillingAddress?: Maybe<Scalars['Boolean']>;
-  customFields?: Maybe<Scalars['JSON']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Adjustment = {
    __typename?: 'Adjustment';
   adjustmentSource: Scalars['String'];
-  type: AdjustmentType;
-  description: Scalars['String'];
   amount: Scalars['Int'];
+  description: Scalars['String'];
+  type: AdjustmentType;
 };
 
 export enum AdjustmentType {
-  TAX = 'TAX',
   PROMOTION = 'PROMOTION',
-  SHIPPING = 'SHIPPING',
-  REFUND = 'REFUND',
-  TAX_REFUND = 'TAX_REFUND',
   PROMOTION_REFUND = 'PROMOTION_REFUND',
-  SHIPPING_REFUND = 'SHIPPING_REFUND'
+  REFUND = 'REFUND',
+  SHIPPING = 'SHIPPING',
+  SHIPPING_REFUND = 'SHIPPING_REFUND',
+  TAX = 'TAX',
+  TAX_REFUND = 'TAX_REFUND'
 }
 
 export type Administrator = Node & {
    __typename?: 'Administrator';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
   emailAddress: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
   user: User;
 };
 
@@ -100,18 +100,18 @@ export type AdministratorSortParameter = {
 
 export type Asset = Node & {
    __typename?: 'Asset';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  name: Scalars['String'];
-  type: AssetType;
   fileSize: Scalars['Int'];
-  mimeType: Scalars['String'];
-  width: Scalars['Int'];
-  height: Scalars['Int'];
-  source: Scalars['String'];
-  preview: Scalars['String'];
   focalPoint?: Maybe<Coordinate>;
+  height: Scalars['Int'];
+  id: Scalars['ID'];
+  mimeType: Scalars['String'];
+  name: Scalars['String'];
+  preview: Scalars['String'];
+  source: Scalars['String'];
+  type: AssetType;
+  updatedAt: Scalars['DateTime'];
+  width: Scalars['Int'];
 };
 
 export type AssetFilterParameter = {
@@ -154,9 +154,9 @@ export type AssetSortParameter = {
 };
 
 export enum AssetType {
+  BINARY = 'BINARY',
   IMAGE = 'IMAGE',
-  VIDEO = 'VIDEO',
-  BINARY = 'BINARY'
+  VIDEO = 'VIDEO'
 }
 
 export type AssignProductsToChannelInput = {
@@ -167,12 +167,12 @@ export type AssignProductsToChannelInput = {
 
 export type BooleanCustomFieldConfig = CustomField & {
    __typename?: 'BooleanCustomFieldConfig';
-  name: Scalars['String'];
-  type: Scalars['String'];
-  label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
-  readonly?: Maybe<Scalars['Boolean']>;
   internal?: Maybe<Scalars['Boolean']>;
+  label?: Maybe<Array<LocalizedString>>;
+  name: Scalars['String'];
+  readonly?: Maybe<Scalars['Boolean']>;
+  type: Scalars['String'];
 };
 
 export type BooleanOperators = {
@@ -181,13 +181,13 @@ export type BooleanOperators = {
 
 export type Cancellation = Node & StockMovement & {
    __typename?: 'Cancellation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  productVariant: ProductVariant;
-  type: StockMovementType;
-  quantity: Scalars['Int'];
+  id: Scalars['ID'];
   orderLine: OrderLine;
+  productVariant: ProductVariant;
+  quantity: Scalars['Int'];
+  type: StockMovementType;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type CancelOrderInput = {
@@ -200,37 +200,37 @@ export type CancelOrderInput = {
 
 export type Channel = Node & {
    __typename?: 'Channel';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
   code: Scalars['String'];
-  token: Scalars['String'];
-  defaultTaxZone?: Maybe<Zone>;
-  defaultShippingZone?: Maybe<Zone>;
-  defaultLanguageCode: LanguageCode;
+  createdAt: Scalars['DateTime'];
   currencyCode: CurrencyCode;
+  defaultLanguageCode: LanguageCode;
+  defaultShippingZone?: Maybe<Zone>;
+  defaultTaxZone?: Maybe<Zone>;
+  id: Scalars['ID'];
   pricesIncludeTax: Scalars['Boolean'];
+  token: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Collection = Node & {
    __typename?: 'Collection';
-  isPrivate: Scalars['Boolean'];
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  languageCode?: Maybe<LanguageCode>;
-  name: Scalars['String'];
+  assets: Array<Asset>;
   breadcrumbs: Array<CollectionBreadcrumb>;
-  position: Scalars['Int'];
+  children?: Maybe<Array<Collection>>;
+  createdAt: Scalars['DateTime'];
+  customFields?: Maybe<Scalars['JSON']>;
   description: Scalars['String'];
   featuredAsset?: Maybe<Asset>;
-  assets: Array<Asset>;
-  parent?: Maybe<Collection>;
-  children?: Maybe<Array<Collection>>;
   filters: Array<ConfigurableOperation>;
-  translations: Array<CollectionTranslation>;
+  id: Scalars['ID'];
+  isPrivate: Scalars['Boolean'];
+  languageCode?: Maybe<LanguageCode>;
+  name: Scalars['String'];
+  parent?: Maybe<Collection>;
+  position: Scalars['Int'];
   productVariants: ProductVariantList;
-  customFields?: Maybe<Scalars['JSON']>;
+  translations: Array<CollectionTranslation>;
+  updatedAt: Scalars['DateTime'];
 };
 
 
@@ -278,12 +278,12 @@ export type CollectionSortParameter = {
 
 export type CollectionTranslation = {
    __typename?: 'CollectionTranslation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
-  description: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type CollectionTranslationInput = {
@@ -303,11 +303,11 @@ export type ConfigArg = {
 
 export type ConfigArgDefinition = {
    __typename?: 'ConfigArgDefinition';
+  config?: Maybe<Scalars['JSON']>;
+  description?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   type: Scalars['String'];
-  label?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  config?: Maybe<Scalars['JSON']>;
 };
 
 export type ConfigArgInput = {
@@ -318,20 +318,20 @@ export type ConfigArgInput = {
 
 export type ConfigurableOperation = {
    __typename?: 'ConfigurableOperation';
-  code: Scalars['String'];
   args: Array<ConfigArg>;
+  code: Scalars['String'];
 };
 
 export type ConfigurableOperationDefinition = {
    __typename?: 'ConfigurableOperationDefinition';
-  code: Scalars['String'];
   args: Array<ConfigArgDefinition>;
+  code: Scalars['String'];
   description: Scalars['String'];
 };
 
 export type ConfigurableOperationInput = {
-  code: Scalars['String'];
   arguments: Array<ConfigArgInput>;
+  code: Scalars['String'];
 };
 
 export type Coordinate = {
@@ -347,14 +347,14 @@ export type CoordinateInput = {
 
 export type Country = Node & {
    __typename?: 'Country';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  languageCode: LanguageCode;
   code: Scalars['String'];
-  name: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   enabled: Scalars['Boolean'];
+  id: Scalars['ID'];
+  languageCode: LanguageCode;
+  name: Scalars['String'];
   translations: Array<CountryTranslation>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type CountryFilterParameter = {
@@ -389,11 +389,11 @@ export type CountrySortParameter = {
 
 export type CountryTranslation = {
    __typename?: 'CountryTranslation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type CountryTranslationInput = {
@@ -403,18 +403,18 @@ export type CountryTranslationInput = {
 };
 
 export type CreateAddressInput = {
-  fullName?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
   company?: Maybe<Scalars['String']>;
+  countryCode: Scalars['String'];
+  customFields?: Maybe<Scalars['JSON']>;
+  defaultBillingAddress?: Maybe<Scalars['Boolean']>;
+  defaultShippingAddress?: Maybe<Scalars['Boolean']>;
+  fullName?: Maybe<Scalars['String']>;
+  phoneNumber?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
   streetLine1: Scalars['String'];
   streetLine2?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  province?: Maybe<Scalars['String']>;
-  postalCode?: Maybe<Scalars['String']>;
-  countryCode: Scalars['String'];
-  phoneNumber?: Maybe<Scalars['String']>;
-  defaultShippingAddress?: Maybe<Scalars['Boolean']>;
-  defaultBillingAddress?: Maybe<Scalars['Boolean']>;
-  customFields?: Maybe<Scalars['JSON']>;
 };
 
 export type CreateAdministratorInput = {
@@ -461,12 +461,12 @@ export type CreateCustomerGroupInput = {
 };
 
 export type CreateCustomerInput = {
-  title?: Maybe<Scalars['String']>;
+  customFields?: Maybe<Scalars['JSON']>;
+  emailAddress: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   phoneNumber?: Maybe<Scalars['String']>;
-  emailAddress: Scalars['String'];
-  customFields?: Maybe<Scalars['JSON']>;
+  title?: Maybe<Scalars['String']>;
 };
 
 export type CreateFacetInput = {
@@ -573,6 +573,14 @@ export type CreateTaxRateInput = {
   categoryId: Scalars['ID'];
   zoneId: Scalars['ID'];
   customerGroupId?: Maybe<Scalars['ID']>;
+};
+
+export type CreateVendorInput = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  emailAddress: Scalars['String'];
+  password: Scalars['String'];
+  roleIds: Array<Scalars['ID']>;
 };
 
 export type CreateZoneInput = {
@@ -927,18 +935,18 @@ export type CurrentUserChannelInput = {
 
 export type Customer = Node & {
    __typename?: 'Customer';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  title?: Maybe<Scalars['String']>;
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  phoneNumber?: Maybe<Scalars['String']>;
-  emailAddress: Scalars['String'];
   addresses?: Maybe<Array<Address>>;
-  orders: OrderList;
-  user?: Maybe<User>;
+  createdAt: Scalars['DateTime'];
   customFields?: Maybe<Scalars['JSON']>;
+  emailAddress: Scalars['String'];
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
+  orders: OrderList;
+  phoneNumber?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+  user?: Maybe<User>;
 };
 
 
@@ -958,10 +966,10 @@ export type CustomerFilterParameter = {
 
 export type CustomerGroup = Node & {
    __typename?: 'CustomerGroup';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type CustomerList = PaginatedList & {
@@ -989,15 +997,15 @@ export type CustomerSortParameter = {
 };
 
 export type CustomField = {
-  name: Scalars['String'];
-  type: Scalars['String'];
-  label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
-  readonly?: Maybe<Scalars['Boolean']>;
   internal?: Maybe<Scalars['Boolean']>;
+  label?: Maybe<Array<LocalizedString>>;
+  name: Scalars['String'];
+  readonly?: Maybe<Scalars['Boolean']>;
+  type: Scalars['String'];
 };
 
-export type CustomFieldConfig = StringCustomFieldConfig | LocaleStringCustomFieldConfig | IntCustomFieldConfig | FloatCustomFieldConfig | BooleanCustomFieldConfig | DateTimeCustomFieldConfig;
+export type CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | StringCustomFieldConfig;
 
 export type CustomFields = {
    __typename?: 'CustomFields';
@@ -1017,15 +1025,15 @@ export type CustomFields = {
 };
 
 export type DateOperators = {
-  eq?: Maybe<Scalars['DateTime']>;
-  before?: Maybe<Scalars['DateTime']>;
   after?: Maybe<Scalars['DateTime']>;
+  before?: Maybe<Scalars['DateTime']>;
   between?: Maybe<DateRange>;
+  eq?: Maybe<Scalars['DateTime']>;
 };
 
 export type DateRange = {
-  start: Scalars['DateTime'];
   end: Scalars['DateTime'];
+  start: Scalars['DateTime'];
 };
 
 
@@ -1035,21 +1043,21 @@ export type DateRange = {
  */
 export type DateTimeCustomFieldConfig = CustomField & {
    __typename?: 'DateTimeCustomFieldConfig';
-  name: Scalars['String'];
-  type: Scalars['String'];
-  label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
-  readonly?: Maybe<Scalars['Boolean']>;
   internal?: Maybe<Scalars['Boolean']>;
-  min?: Maybe<Scalars['String']>;
+  label?: Maybe<Array<LocalizedString>>;
   max?: Maybe<Scalars['String']>;
+  min?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  readonly?: Maybe<Scalars['Boolean']>;
   step?: Maybe<Scalars['Int']>;
+  type: Scalars['String'];
 };
 
 export type DeletionResponse = {
    __typename?: 'DeletionResponse';
-  result: DeletionResult;
   message?: Maybe<Scalars['String']>;
+  result: DeletionResult;
 };
 
 export enum DeletionResult {
@@ -1061,16 +1069,16 @@ export enum DeletionResult {
 
 export type Facet = Node & {
    __typename?: 'Facet';
-  isPrivate: Scalars['Boolean'];
-  id: Scalars['ID'];
+  code: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  customFields?: Maybe<Scalars['JSON']>;
+  id: Scalars['ID'];
+  isPrivate: Scalars['Boolean'];
   languageCode: LanguageCode;
   name: Scalars['String'];
-  code: Scalars['String'];
-  values: Array<FacetValue>;
   translations: Array<FacetTranslation>;
-  customFields?: Maybe<Scalars['JSON']>;
+  updatedAt: Scalars['DateTime'];
+  values: Array<FacetValue>;
 };
 
 export type FacetFilterParameter = {
@@ -1105,11 +1113,11 @@ export type FacetSortParameter = {
 
 export type FacetTranslation = {
    __typename?: 'FacetTranslation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type FacetTranslationInput = {
@@ -1121,15 +1129,15 @@ export type FacetTranslationInput = {
 
 export type FacetValue = Node & {
    __typename?: 'FacetValue';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  languageCode: LanguageCode;
-  facet: Facet;
-  name: Scalars['String'];
   code: Scalars['String'];
-  translations: Array<FacetValueTranslation>;
+  createdAt: Scalars['DateTime'];
   customFields?: Maybe<Scalars['JSON']>;
+  facet: Facet;
+  id: Scalars['ID'];
+  languageCode: LanguageCode;
+  name: Scalars['String'];
+  translations: Array<FacetValueTranslation>;
+  updatedAt: Scalars['DateTime'];
 };
 
 /**
@@ -1138,17 +1146,17 @@ export type FacetValue = Node & {
  */
 export type FacetValueResult = {
    __typename?: 'FacetValueResult';
-  facetValue: FacetValue;
   count: Scalars['Int'];
+  facetValue: FacetValue;
 };
 
 export type FacetValueTranslation = {
    __typename?: 'FacetValueTranslation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type FacetValueTranslationInput = {
@@ -1160,25 +1168,25 @@ export type FacetValueTranslationInput = {
 
 export type FloatCustomFieldConfig = CustomField & {
    __typename?: 'FloatCustomFieldConfig';
-  name: Scalars['String'];
-  type: Scalars['String'];
-  label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
-  readonly?: Maybe<Scalars['Boolean']>;
   internal?: Maybe<Scalars['Boolean']>;
-  min?: Maybe<Scalars['Float']>;
+  label?: Maybe<Array<LocalizedString>>;
   max?: Maybe<Scalars['Float']>;
+  min?: Maybe<Scalars['Float']>;
+  name: Scalars['String'];
+  readonly?: Maybe<Scalars['Boolean']>;
   step?: Maybe<Scalars['Float']>;
+  type: Scalars['String'];
 };
 
 export type Fulfillment = Node & {
    __typename?: 'Fulfillment';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  orderItems: Array<OrderItem>;
+  id: Scalars['ID'];
   method: Scalars['String'];
+  orderItems: Array<OrderItem>;
   trackingCode?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type FulfillOrderInput = {
@@ -1189,31 +1197,31 @@ export type FulfillOrderInput = {
 
 export type GlobalSettings = {
    __typename?: 'GlobalSettings';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
   availableLanguages: Array<LanguageCode>;
-  trackInventory: Scalars['Boolean'];
-  serverConfig: ServerConfig;
+  createdAt: Scalars['DateTime'];
   customFields?: Maybe<Scalars['JSON']>;
+  id: Scalars['ID'];
+  serverConfig: ServerConfig;
+  trackInventory: Scalars['Boolean'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type HistoryEntry = Node & {
    __typename?: 'HistoryEntry';
-  id: Scalars['ID'];
+  administrator?: Maybe<Administrator>;
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  data: Scalars['JSON'];
+  id: Scalars['ID'];
   isPublic: Scalars['Boolean'];
   type: HistoryEntryType;
-  administrator?: Maybe<Administrator>;
-  data: Scalars['JSON'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type HistoryEntryFilterParameter = {
   createdAt?: Maybe<DateOperators>;
-  updatedAt?: Maybe<DateOperators>;
   isPublic?: Maybe<BooleanOperators>;
   type?: Maybe<StringOperators>;
+  updatedAt?: Maybe<DateOperators>;
 };
 
 export type HistoryEntryList = PaginatedList & {
@@ -1223,47 +1231,47 @@ export type HistoryEntryList = PaginatedList & {
 };
 
 export type HistoryEntryListOptions = {
-  skip?: Maybe<Scalars['Int']>;
-  take?: Maybe<Scalars['Int']>;
-  sort?: Maybe<HistoryEntrySortParameter>;
   filter?: Maybe<HistoryEntryFilterParameter>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<HistoryEntrySortParameter>;
+  take?: Maybe<Scalars['Int']>;
 };
 
 export type HistoryEntrySortParameter = {
-  id?: Maybe<SortOrder>;
   createdAt?: Maybe<SortOrder>;
+  id?: Maybe<SortOrder>;
   updatedAt?: Maybe<SortOrder>;
 };
 
 export enum HistoryEntryType {
-  ORDER_STATE_TRANSITION = 'ORDER_STATE_TRANSITION',
-  ORDER_PAYMENT_TRANSITION = 'ORDER_PAYMENT_TRANSITION',
-  ORDER_FULLFILLMENT = 'ORDER_FULLFILLMENT',
   ORDER_CANCELLATION = 'ORDER_CANCELLATION',
-  ORDER_REFUND_TRANSITION = 'ORDER_REFUND_TRANSITION',
-  ORDER_NOTE = 'ORDER_NOTE',
   ORDER_COUPON_APPLIED = 'ORDER_COUPON_APPLIED',
-  ORDER_COUPON_REMOVED = 'ORDER_COUPON_REMOVED'
+  ORDER_COUPON_REMOVED = 'ORDER_COUPON_REMOVED',
+  ORDER_FULLFILLMENT = 'ORDER_FULLFILLMENT',
+  ORDER_NOTE = 'ORDER_NOTE',
+  ORDER_PAYMENT_TRANSITION = 'ORDER_PAYMENT_TRANSITION',
+  ORDER_REFUND_TRANSITION = 'ORDER_REFUND_TRANSITION',
+  ORDER_STATE_TRANSITION = 'ORDER_STATE_TRANSITION'
 }
 
 export type ImportInfo = {
    __typename?: 'ImportInfo';
   errors?: Maybe<Array<Scalars['String']>>;
-  processed: Scalars['Int'];
   imported: Scalars['Int'];
+  processed: Scalars['Int'];
 };
 
 export type IntCustomFieldConfig = CustomField & {
    __typename?: 'IntCustomFieldConfig';
-  name: Scalars['String'];
-  type: Scalars['String'];
-  label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
-  readonly?: Maybe<Scalars['Boolean']>;
   internal?: Maybe<Scalars['Boolean']>;
-  min?: Maybe<Scalars['Int']>;
+  label?: Maybe<Array<LocalizedString>>;
   max?: Maybe<Scalars['Int']>;
+  min?: Maybe<Scalars['Int']>;
+  name: Scalars['String'];
+  readonly?: Maybe<Scalars['Boolean']>;
   step?: Maybe<Scalars['Int']>;
+  type: Scalars['String'];
 };
 
 export type Job = Node & {
@@ -1716,13 +1724,13 @@ export enum LanguageCode {
 
 export type LocaleStringCustomFieldConfig = CustomField & {
    __typename?: 'LocaleStringCustomFieldConfig';
-  name: Scalars['String'];
-  type: Scalars['String'];
-  label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
-  readonly?: Maybe<Scalars['Boolean']>;
   internal?: Maybe<Scalars['Boolean']>;
+  label?: Maybe<Array<LocalizedString>>;
+  name: Scalars['String'];
   pattern?: Maybe<Scalars['String']>;
+  readonly?: Maybe<Scalars['Boolean']>;
+  type: Scalars['String'];
 };
 
 export type LocalizedString = {
@@ -1755,6 +1763,8 @@ export type Mutation = {
   assignProductsToChannel: Array<Product>;
   /** Assign a Role to an Administrator */
   assignRoleToAdministrator: Administrator;
+  /** Assign a Role to an Vendor */
+  assignRoleToVendor: Vendor;
   cancelOrder: Order;
   /** Create a new Administrator */
   createAdministrator: Administrator;
@@ -1793,6 +1803,8 @@ export type Mutation = {
   createTaxCategory: TaxCategory;
   /** Create a new TaxRate */
   createTaxRate: TaxRate;
+  /** Create a new Vendor */
+  createVendor: Vendor;
   /** Create a new Zone */
   createZone: Zone;
   /** Delete an Asset */
@@ -1893,6 +1905,8 @@ export type Mutation = {
   /** Update an existing TaxRate */
   updateTaxRate: TaxRate;
   updateUserChannels: UserStatus;
+  /** Update an existing Vendor */
+  updateVendor: Vendor;
   /** Update an existing Zone */
   updateZone: Zone;
 };
@@ -1928,6 +1942,12 @@ export type MutationAssignProductsToChannelArgs = {
 
 export type MutationAssignRoleToAdministratorArgs = {
   administratorId: Scalars['ID'];
+  roleId: Scalars['ID'];
+};
+
+
+export type MutationAssignRoleToVendorArgs = {
+  vendorId: Scalars['ID'];
   roleId: Scalars['ID'];
 };
 
@@ -2034,6 +2054,11 @@ export type MutationCreateTaxRateArgs = {
 };
 
 
+export type MutationCreateVendorArgs = {
+  input: CreateVendorInput;
+};
+
+
 export type MutationCreateZoneArgs = {
   input: CreateZoneInput;
 };
@@ -2133,9 +2158,9 @@ export type MutationImportProductsArgs = {
 
 
 export type MutationLoginArgs = {
-  username: Scalars['String'];
   password: Scalars['String'];
   rememberMe?: Maybe<Scalars['Boolean']>;
+  username: Scalars['String'];
 };
 
 
@@ -2313,6 +2338,11 @@ export type MutationUpdateUserChannelsArgs = {
 };
 
 
+export type MutationUpdateVendorArgs = {
+  input: UpdateVendorInput;
+};
+
+
 export type MutationUpdateZoneArgs = {
   input: UpdateZoneInput;
 };
@@ -2327,50 +2357,50 @@ export type Node = {
 };
 
 export type NumberOperators = {
+  between?: Maybe<NumberRange>;
   eq?: Maybe<Scalars['Float']>;
-  lt?: Maybe<Scalars['Float']>;
-  lte?: Maybe<Scalars['Float']>;
   gt?: Maybe<Scalars['Float']>;
   gte?: Maybe<Scalars['Float']>;
-  between?: Maybe<NumberRange>;
+  lt?: Maybe<Scalars['Float']>;
+  lte?: Maybe<Scalars['Float']>;
 };
 
 export type NumberRange = {
-  start: Scalars['Float'];
   end: Scalars['Float'];
+  start: Scalars['Float'];
 };
 
 export type Order = Node & {
    __typename?: 'Order';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  /** A unique code for the Order */
-  code: Scalars['String'];
-  state: Scalars['String'];
   /** An order is active as long as the payment process has not been completed */
   active: Scalars['Boolean'];
-  customer?: Maybe<Customer>;
-  shippingAddress?: Maybe<OrderAddress>;
-  billingAddress?: Maybe<OrderAddress>;
-  lines: Array<OrderLine>;
   /** Order-level adjustments to the order total, such as discounts from promotions */
   adjustments: Array<Adjustment>;
+  billingAddress?: Maybe<OrderAddress>;
+  /** A unique code for the Order */
+  code: Scalars['String'];
   couponCodes: Array<Scalars['String']>;
-  promotions: Array<Promotion>;
-  payments?: Maybe<Array<Payment>>;
+  createdAt: Scalars['DateTime'];
+  currencyCode: CurrencyCode;
+  customFields?: Maybe<Scalars['JSON']>;
+  customer?: Maybe<Customer>;
   fulfillments?: Maybe<Array<Fulfillment>>;
-  subTotalBeforeTax: Scalars['Int'];
+  history: HistoryEntryList;
+  id: Scalars['ID'];
+  lines: Array<OrderLine>;
+  payments?: Maybe<Array<Payment>>;
+  promotions: Array<Promotion>;
+  shipping: Scalars['Int'];
+  shippingAddress?: Maybe<OrderAddress>;
+  shippingMethod?: Maybe<ShippingMethod>;
+  shippingWithTax: Scalars['Int'];
+  state: Scalars['String'];
   /** The subTotal is the total of the OrderLines, before order-level promotions and shipping has been applied. */
   subTotal: Scalars['Int'];
-  currencyCode: CurrencyCode;
-  shipping: Scalars['Int'];
-  shippingWithTax: Scalars['Int'];
-  shippingMethod?: Maybe<ShippingMethod>;
-  totalBeforeTax: Scalars['Int'];
+  subTotalBeforeTax: Scalars['Int'];
   total: Scalars['Int'];
-  history: HistoryEntryList;
-  customFields?: Maybe<Scalars['JSON']>;
+  totalBeforeTax: Scalars['Int'];
+  updatedAt: Scalars['DateTime'];
 };
 
 
@@ -2380,63 +2410,63 @@ export type OrderHistoryArgs = {
 
 export type OrderAddress = {
    __typename?: 'OrderAddress';
-  fullName?: Maybe<Scalars['String']>;
-  company?: Maybe<Scalars['String']>;
-  streetLine1?: Maybe<Scalars['String']>;
-  streetLine2?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
-  province?: Maybe<Scalars['String']>;
-  postalCode?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
   countryCode?: Maybe<Scalars['String']>;
+  fullName?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
+  streetLine1?: Maybe<Scalars['String']>;
+  streetLine2?: Maybe<Scalars['String']>;
 };
 
 export type OrderFilterParameter = {
-  createdAt?: Maybe<DateOperators>;
-  updatedAt?: Maybe<DateOperators>;
-  code?: Maybe<StringOperators>;
-  state?: Maybe<StringOperators>;
   active?: Maybe<BooleanOperators>;
-  subTotalBeforeTax?: Maybe<NumberOperators>;
-  subTotal?: Maybe<NumberOperators>;
+  code?: Maybe<StringOperators>;
+  createdAt?: Maybe<DateOperators>;
   currencyCode?: Maybe<StringOperators>;
   shipping?: Maybe<NumberOperators>;
   shippingWithTax?: Maybe<NumberOperators>;
-  totalBeforeTax?: Maybe<NumberOperators>;
+  state?: Maybe<StringOperators>;
+  subTotal?: Maybe<NumberOperators>;
+  subTotalBeforeTax?: Maybe<NumberOperators>;
   total?: Maybe<NumberOperators>;
+  totalBeforeTax?: Maybe<NumberOperators>;
+  updatedAt?: Maybe<DateOperators>;
 };
 
 export type OrderItem = Node & {
    __typename?: 'OrderItem';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  cancelled: Scalars['Boolean'];
-  unitPrice: Scalars['Int'];
-  unitPriceWithTax: Scalars['Int'];
-  unitPriceIncludesTax: Scalars['Boolean'];
-  taxRate: Scalars['Float'];
   adjustments: Array<Adjustment>;
+  cancelled: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
   fulfillment?: Maybe<Fulfillment>;
+  id: Scalars['ID'];
   refundId?: Maybe<Scalars['ID']>;
+  taxRate: Scalars['Float'];
+  unitPrice: Scalars['Int'];
+  unitPriceIncludesTax: Scalars['Boolean'];
+  unitPriceWithTax: Scalars['Int'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type OrderLine = Node & {
    __typename?: 'OrderLine';
-  id: Scalars['ID'];
+  adjustments: Array<Adjustment>;
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  productVariant: ProductVariant;
+  customFields?: Maybe<Scalars['JSON']>;
   featuredAsset?: Maybe<Asset>;
+  id: Scalars['ID'];
+  items: Array<OrderItem>;
+  order: Order;
+  productVariant: ProductVariant;
+  quantity: Scalars['Int'];
+  totalPrice: Scalars['Int'];
   unitPrice: Scalars['Int'];
   unitPriceWithTax: Scalars['Int'];
-  quantity: Scalars['Int'];
-  items: Array<OrderItem>;
-  totalPrice: Scalars['Int'];
-  adjustments: Array<Adjustment>;
-  order: Order;
-  customFields?: Maybe<Scalars['JSON']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type OrderLineInput = {
@@ -2451,24 +2481,24 @@ export type OrderList = PaginatedList & {
 };
 
 export type OrderListOptions = {
-  skip?: Maybe<Scalars['Int']>;
-  take?: Maybe<Scalars['Int']>;
-  sort?: Maybe<OrderSortParameter>;
   filter?: Maybe<OrderFilterParameter>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<OrderSortParameter>;
+  take?: Maybe<Scalars['Int']>;
 };
 
 export type OrderSortParameter = {
-  id?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
   code?: Maybe<SortOrder>;
-  state?: Maybe<SortOrder>;
-  subTotalBeforeTax?: Maybe<SortOrder>;
-  subTotal?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  id?: Maybe<SortOrder>;
   shipping?: Maybe<SortOrder>;
   shippingWithTax?: Maybe<SortOrder>;
-  totalBeforeTax?: Maybe<SortOrder>;
+  state?: Maybe<SortOrder>;
+  subTotal?: Maybe<SortOrder>;
+  subTotalBeforeTax?: Maybe<SortOrder>;
   total?: Maybe<SortOrder>;
+  totalBeforeTax?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
 export type PaginatedList = {
@@ -2478,26 +2508,26 @@ export type PaginatedList = {
 
 export type Payment = Node & {
    __typename?: 'Payment';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  method: Scalars['String'];
   amount: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+  errorMessage?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  metadata?: Maybe<Scalars['JSON']>;
+  method: Scalars['String'];
+  refunds: Array<Refund>;
   state: Scalars['String'];
   transactionId?: Maybe<Scalars['String']>;
-  errorMessage?: Maybe<Scalars['String']>;
-  refunds: Array<Refund>;
-  metadata?: Maybe<Scalars['JSON']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type PaymentMethod = Node & {
    __typename?: 'PaymentMethod';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
   code: Scalars['String'];
-  enabled: Scalars['Boolean'];
   configArgs: Array<ConfigArg>;
+  createdAt: Scalars['DateTime'];
+  enabled: Scalars['Boolean'];
+  id: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type PaymentMethodFilterParameter = {
@@ -2577,31 +2607,31 @@ export enum Permission {
 /** The price range where the result has more than one price */
 export type PriceRange = {
    __typename?: 'PriceRange';
-  min: Scalars['Int'];
   max: Scalars['Int'];
+  min: Scalars['Int'];
 };
 
 export type Product = Node & {
    __typename?: 'Product';
-  enabled: Scalars['Boolean'];
+  assets: Array<Asset>;
   channels: Array<Channel>;
-  id: Scalars['ID'];
+  collections: Array<Collection>;
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  customFields?: Maybe<Scalars['JSON']>;
+  description: Scalars['String'];
+  enabled: Scalars['Boolean'];
+  facetValues: Array<FacetValue>;
+  featuredAsset?: Maybe<Asset>;
+  globalProduct?: Maybe<Product>;
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
-  slug: Scalars['String'];
-  description: Scalars['String'];
-  featuredAsset?: Maybe<Asset>;
-  assets: Array<Asset>;
-  variants: Array<ProductVariant>;
   optionGroups: Array<ProductOptionGroup>;
-  facetValues: Array<FacetValue>;
+  slug: Scalars['String'];
   translations: Array<ProductTranslation>;
-  collections: Array<Collection>;
-  globalProduct?: Maybe<Product>;
+  updatedAt: Scalars['DateTime'];
+  variants: Array<ProductVariant>;
   vendor?: Maybe<Vendor>;
-  customFields?: Maybe<Scalars['JSON']>;
 };
 
 export type ProductFilterParameter = {
@@ -2629,37 +2659,37 @@ export type ProductListOptions = {
 
 export type ProductOption = Node & {
    __typename?: 'ProductOption';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  languageCode: LanguageCode;
   code: Scalars['String'];
-  name: Scalars['String'];
-  groupId: Scalars['ID'];
-  translations: Array<ProductOptionTranslation>;
+  createdAt: Scalars['DateTime'];
   customFields?: Maybe<Scalars['JSON']>;
+  groupId: Scalars['ID'];
+  id: Scalars['ID'];
+  languageCode: LanguageCode;
+  name: Scalars['String'];
+  translations: Array<ProductOptionTranslation>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ProductOptionGroup = Node & {
    __typename?: 'ProductOptionGroup';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  languageCode: LanguageCode;
   code: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  customFields?: Maybe<Scalars['JSON']>;
+  id: Scalars['ID'];
+  languageCode: LanguageCode;
   name: Scalars['String'];
   options: Array<ProductOption>;
   translations: Array<ProductOptionGroupTranslation>;
-  customFields?: Maybe<Scalars['JSON']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ProductOptionGroupTranslation = {
    __typename?: 'ProductOptionGroupTranslation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ProductOptionGroupTranslationInput = {
@@ -2671,11 +2701,11 @@ export type ProductOptionGroupTranslationInput = {
 
 export type ProductOptionTranslation = {
    __typename?: 'ProductOptionTranslation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ProductOptionTranslationInput = {
@@ -2696,13 +2726,13 @@ export type ProductSortParameter = {
 
 export type ProductTranslation = {
    __typename?: 'ProductTranslation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
   slug: Scalars['String'];
-  description: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ProductTranslationInput = {
@@ -2716,29 +2746,29 @@ export type ProductTranslationInput = {
 
 export type ProductVariant = Node & {
    __typename?: 'ProductVariant';
-  enabled: Scalars['Boolean'];
-  stockOnHand: Scalars['Int'];
-  trackInventory: Scalars['Boolean'];
-  stockMovements: StockMovementList;
-  id: Scalars['ID'];
-  productId: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  languageCode: LanguageCode;
-  sku: Scalars['String'];
-  name: Scalars['String'];
-  featuredAsset?: Maybe<Asset>;
   assets: Array<Asset>;
-  price: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
   currencyCode: CurrencyCode;
+  customFields?: Maybe<Scalars['JSON']>;
+  enabled: Scalars['Boolean'];
+  facetValues: Array<FacetValue>;
+  featuredAsset?: Maybe<Asset>;
+  id: Scalars['ID'];
+  languageCode: LanguageCode;
+  name: Scalars['String'];
+  options: Array<ProductOption>;
+  price: Scalars['Int'];
   priceIncludesTax: Scalars['Boolean'];
   priceWithTax: Scalars['Int'];
-  taxRateApplied: TaxRate;
+  productId: Scalars['ID'];
+  sku: Scalars['String'];
+  stockMovements: StockMovementList;
+  stockOnHand: Scalars['Int'];
   taxCategory: TaxCategory;
-  options: Array<ProductOption>;
-  facetValues: Array<FacetValue>;
+  taxRateApplied: TaxRate;
+  trackInventory: Scalars['Boolean'];
   translations: Array<ProductVariantTranslation>;
-  customFields?: Maybe<Scalars['JSON']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 
@@ -2747,18 +2777,18 @@ export type ProductVariantStockMovementsArgs = {
 };
 
 export type ProductVariantFilterParameter = {
-  enabled?: Maybe<BooleanOperators>;
-  stockOnHand?: Maybe<NumberOperators>;
-  trackInventory?: Maybe<BooleanOperators>;
   createdAt?: Maybe<DateOperators>;
-  updatedAt?: Maybe<DateOperators>;
+  currencyCode?: Maybe<StringOperators>;
+  enabled?: Maybe<BooleanOperators>;
   languageCode?: Maybe<StringOperators>;
-  sku?: Maybe<StringOperators>;
   name?: Maybe<StringOperators>;
   price?: Maybe<NumberOperators>;
-  currencyCode?: Maybe<StringOperators>;
   priceIncludesTax?: Maybe<BooleanOperators>;
   priceWithTax?: Maybe<NumberOperators>;
+  sku?: Maybe<StringOperators>;
+  stockOnHand?: Maybe<NumberOperators>;
+  trackInventory?: Maybe<BooleanOperators>;
+  updatedAt?: Maybe<DateOperators>;
 };
 
 export type ProductVariantList = PaginatedList & {
@@ -2768,31 +2798,31 @@ export type ProductVariantList = PaginatedList & {
 };
 
 export type ProductVariantListOptions = {
-  skip?: Maybe<Scalars['Int']>;
-  take?: Maybe<Scalars['Int']>;
-  sort?: Maybe<ProductVariantSortParameter>;
   filter?: Maybe<ProductVariantFilterParameter>;
+  skip?: Maybe<Scalars['Int']>;
+  sort?: Maybe<ProductVariantSortParameter>;
+  take?: Maybe<Scalars['Int']>;
 };
 
 export type ProductVariantSortParameter = {
-  stockOnHand?: Maybe<SortOrder>;
-  id?: Maybe<SortOrder>;
-  productId?: Maybe<SortOrder>;
   createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
-  sku?: Maybe<SortOrder>;
+  id?: Maybe<SortOrder>;
   name?: Maybe<SortOrder>;
   price?: Maybe<SortOrder>;
   priceWithTax?: Maybe<SortOrder>;
+  productId?: Maybe<SortOrder>;
+  sku?: Maybe<SortOrder>;
+  stockOnHand?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
 export type ProductVariantTranslation = {
    __typename?: 'ProductVariantTranslation';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   languageCode: LanguageCode;
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ProductVariantTranslationInput = {
@@ -2804,17 +2834,17 @@ export type ProductVariantTranslationInput = {
 
 export type Promotion = Node & {
    __typename?: 'Promotion';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  startsAt?: Maybe<Scalars['DateTime']>;
-  endsAt?: Maybe<Scalars['DateTime']>;
-  couponCode?: Maybe<Scalars['String']>;
-  perCustomerUsageLimit?: Maybe<Scalars['Int']>;
-  name: Scalars['String'];
-  enabled: Scalars['Boolean'];
-  conditions: Array<ConfigurableOperation>;
   actions: Array<ConfigurableOperation>;
+  conditions: Array<ConfigurableOperation>;
+  couponCode?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  enabled: Scalars['Boolean'];
+  endsAt?: Maybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  perCustomerUsageLimit?: Maybe<Scalars['Int']>;
+  startsAt?: Maybe<Scalars['DateTime']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type PromotionFilterParameter = {
@@ -2909,6 +2939,8 @@ export type Query = {
   testShippingMethod: TestShippingMethodResult;
   uiState: UiState;
   userStatus: UserStatus;
+  vendor?: Maybe<Vendor>;
+  vendors: VendorList;
   zone?: Maybe<Zone>;
   zones: Array<Zone>;
 };
@@ -3100,26 +3132,36 @@ export type QueryTestShippingMethodArgs = {
 };
 
 
+export type QueryVendorArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryVendorsArgs = {
+  options?: Maybe<VendorListOptions>;
+};
+
+
 export type QueryZoneArgs = {
   id: Scalars['ID'];
 };
 
 export type Refund = Node & {
    __typename?: 'Refund';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  items: Scalars['Int'];
-  shipping: Scalars['Int'];
   adjustment: Scalars['Int'];
-  total: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  items: Scalars['Int'];
+  metadata?: Maybe<Scalars['JSON']>;
   method?: Maybe<Scalars['String']>;
-  state: Scalars['String'];
-  transactionId?: Maybe<Scalars['String']>;
-  reason?: Maybe<Scalars['String']>;
   orderItems: Array<OrderItem>;
   paymentId: Scalars['ID'];
-  metadata?: Maybe<Scalars['JSON']>;
+  reason?: Maybe<Scalars['String']>;
+  shipping: Scalars['Int'];
+  state: Scalars['String'];
+  total: Scalars['Int'];
+  transactionId?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type RefundOrderInput = {
@@ -3137,24 +3179,24 @@ export type RemoveProductsFromChannelInput = {
 
 export type Return = Node & StockMovement & {
    __typename?: 'Return';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  productVariant: ProductVariant;
-  type: StockMovementType;
-  quantity: Scalars['Int'];
+  id: Scalars['ID'];
   orderItem: OrderItem;
+  productVariant: ProductVariant;
+  quantity: Scalars['Int'];
+  type: StockMovementType;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Role = Node & {
    __typename?: 'Role';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  code: Scalars['String'];
-  description: Scalars['String'];
-  permissions: Array<Permission>;
   channels: Array<Channel>;
+  code: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['ID'];
+  permissions: Array<Permission>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type RoleFilterParameter = {
@@ -3187,23 +3229,23 @@ export type RoleSortParameter = {
 
 export type Sale = Node & StockMovement & {
    __typename?: 'Sale';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  productVariant: ProductVariant;
-  type: StockMovementType;
-  quantity: Scalars['Int'];
+  id: Scalars['ID'];
   orderLine: OrderLine;
+  productVariant: ProductVariant;
+  quantity: Scalars['Int'];
+  type: StockMovementType;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type SearchInput = {
-  term?: Maybe<Scalars['String']>;
-  facetValueIds?: Maybe<Array<Scalars['ID']>>;
   collectionId?: Maybe<Scalars['ID']>;
+  facetValueIds?: Maybe<Array<Scalars['ID']>>;
   groupByProduct?: Maybe<Scalars['Boolean']>;
-  take?: Maybe<Scalars['Int']>;
   skip?: Maybe<Scalars['Int']>;
   sort?: Maybe<SearchResultSortParameter>;
+  take?: Maybe<Scalars['Int']>;
+  term?: Maybe<Scalars['String']>;
 };
 
 export type SearchReindexResponse = {
@@ -3213,45 +3255,45 @@ export type SearchReindexResponse = {
 
 export type SearchResponse = {
    __typename?: 'SearchResponse';
+  facetValues: Array<FacetValueResult>;
   items: Array<SearchResult>;
   totalItems: Scalars['Int'];
-  facetValues: Array<FacetValueResult>;
 };
 
 export type SearchResult = {
    __typename?: 'SearchResult';
-  enabled: Scalars['Boolean'];
   /** An array of ids of the Collections in which this result appears */
   channelIds: Array<Scalars['ID']>;
-  sku: Scalars['String'];
-  slug: Scalars['String'];
+  /** An array of ids of the Collections in which this result appears */
+  collectionIds: Array<Scalars['ID']>;
+  currencyCode: CurrencyCode;
+  description: Scalars['String'];
+  enabled: Scalars['Boolean'];
+  facetIds: Array<Scalars['ID']>;
+  facetValueIds: Array<Scalars['ID']>;
+  price: SearchResultPrice;
+  priceWithTax: SearchResultPrice;
+  productAsset?: Maybe<SearchResultAsset>;
   productId: Scalars['ID'];
   productName: Scalars['String'];
   /** @deprecated Use `productAsset.preview` instead */
   productPreview: Scalars['String'];
-  productAsset?: Maybe<SearchResultAsset>;
+  productVariantAsset?: Maybe<SearchResultAsset>;
   productVariantId: Scalars['ID'];
   productVariantName: Scalars['String'];
   /** @deprecated Use `productVariantAsset.preview` instead */
   productVariantPreview: Scalars['String'];
-  productVariantAsset?: Maybe<SearchResultAsset>;
-  price: SearchResultPrice;
-  priceWithTax: SearchResultPrice;
-  currencyCode: CurrencyCode;
-  description: Scalars['String'];
-  facetIds: Array<Scalars['ID']>;
-  facetValueIds: Array<Scalars['ID']>;
-  /** An array of ids of the Collections in which this result appears */
-  collectionIds: Array<Scalars['ID']>;
   /** A relevence score for the result. Differs between database implementations */
   score: Scalars['Float'];
+  sku: Scalars['String'];
+  slug: Scalars['String'];
 };
 
 export type SearchResultAsset = {
    __typename?: 'SearchResultAsset';
+  focalPoint?: Maybe<Coordinate>;
   id: Scalars['ID'];
   preview: Scalars['String'];
-  focalPoint?: Maybe<Coordinate>;
 };
 
 /** The price of a search result product, either as a range or as a single price */
@@ -3274,13 +3316,13 @@ export type SettleRefundInput = {
 
 export type ShippingMethod = Node & {
    __typename?: 'ShippingMethod';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  code: Scalars['String'];
-  description: Scalars['String'];
-  checker: ConfigurableOperation;
   calculator: ConfigurableOperation;
+  checker: ConfigurableOperation;
+  code: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ShippingMethodFilterParameter = {
@@ -3305,11 +3347,11 @@ export type ShippingMethodListOptions = {
 
 export type ShippingMethodQuote = {
    __typename?: 'ShippingMethodQuote';
+  description: Scalars['String'];
   id: Scalars['ID'];
+  metadata?: Maybe<Scalars['JSON']>;
   price: Scalars['Int'];
   priceWithTax: Scalars['Int'];
-  description: Scalars['String'];
-  metadata?: Maybe<Scalars['JSON']>;
 };
 
 export type ShippingMethodSortParameter = {
@@ -3333,24 +3375,24 @@ export enum SortOrder {
 
 export type StockAdjustment = Node & StockMovement & {
    __typename?: 'StockAdjustment';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   productVariant: ProductVariant;
-  type: StockMovementType;
   quantity: Scalars['Int'];
+  type: StockMovementType;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type StockMovement = {
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   productVariant: ProductVariant;
-  type: StockMovementType;
   quantity: Scalars['Int'];
+  type: StockMovementType;
+  updatedAt: Scalars['DateTime'];
 };
 
-export type StockMovementItem = StockAdjustment | Sale | Cancellation | Return;
+export type StockMovementItem = Cancellation | Return | Sale | StockAdjustment;
 
 export type StockMovementList = {
    __typename?: 'StockMovementList';
@@ -3366,54 +3408,54 @@ export type StockMovementListOptions = {
 
 export enum StockMovementType {
   ADJUSTMENT = 'ADJUSTMENT',
-  SALE = 'SALE',
   CANCELLATION = 'CANCELLATION',
-  RETURN = 'RETURN'
+  RETURN = 'RETURN',
+  SALE = 'SALE'
 }
 
 export type StringCustomFieldConfig = CustomField & {
    __typename?: 'StringCustomFieldConfig';
-  name: Scalars['String'];
-  type: Scalars['String'];
-  length?: Maybe<Scalars['Int']>;
-  label?: Maybe<Array<LocalizedString>>;
   description?: Maybe<Array<LocalizedString>>;
-  readonly?: Maybe<Scalars['Boolean']>;
   internal?: Maybe<Scalars['Boolean']>;
-  pattern?: Maybe<Scalars['String']>;
+  label?: Maybe<Array<LocalizedString>>;
+  length?: Maybe<Scalars['Int']>;
+  name: Scalars['String'];
   options?: Maybe<Array<StringFieldOption>>;
+  pattern?: Maybe<Scalars['String']>;
+  readonly?: Maybe<Scalars['Boolean']>;
+  type: Scalars['String'];
 };
 
 export type StringFieldOption = {
    __typename?: 'StringFieldOption';
-  value: Scalars['String'];
   label?: Maybe<Array<LocalizedString>>;
+  value: Scalars['String'];
 };
 
 export type StringOperators = {
-  eq?: Maybe<Scalars['String']>;
   contains?: Maybe<Scalars['String']>;
+  eq?: Maybe<Scalars['String']>;
 };
 
 export type TaxCategory = Node & {
    __typename?: 'TaxCategory';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID'];
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type TaxRate = Node & {
    __typename?: 'TaxRate';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  name: Scalars['String'];
-  enabled: Scalars['Boolean'];
-  value: Scalars['Float'];
   category: TaxCategory;
-  zone: Zone;
+  createdAt: Scalars['DateTime'];
   customerGroup?: Maybe<CustomerGroup>;
+  enabled: Scalars['Boolean'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  value: Scalars['Float'];
+  zone: Zone;
 };
 
 export type TaxRateFilterParameter = {
@@ -3482,19 +3524,19 @@ export type UiState = {
 };
 
 export type UpdateAddressInput = {
-  id: Scalars['ID'];
-  fullName?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
   company?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
+  customFields?: Maybe<Scalars['JSON']>;
+  defaultBillingAddress?: Maybe<Scalars['Boolean']>;
+  defaultShippingAddress?: Maybe<Scalars['Boolean']>;
+  fullName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  phoneNumber?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
   streetLine1?: Maybe<Scalars['String']>;
   streetLine2?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  province?: Maybe<Scalars['String']>;
-  postalCode?: Maybe<Scalars['String']>;
-  countryCode?: Maybe<Scalars['String']>;
-  phoneNumber?: Maybe<Scalars['String']>;
-  defaultShippingAddress?: Maybe<Scalars['Boolean']>;
-  defaultBillingAddress?: Maybe<Scalars['Boolean']>;
-  customFields?: Maybe<Scalars['JSON']>;
 };
 
 export type UpdateAdministratorInput = {
@@ -3666,6 +3708,15 @@ export type UpdateTaxRateInput = {
   customerGroupId?: Maybe<Scalars['ID']>;
 };
 
+export type UpdateVendorInput = {
+  id: Scalars['ID'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  emailAddress?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  roleIds?: Maybe<Array<Scalars['ID']>>;
+};
+
 export type UpdateZoneInput = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
@@ -3674,14 +3725,14 @@ export type UpdateZoneInput = {
 
 export type User = Node & {
    __typename?: 'User';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  identifier: Scalars['String'];
-  verified: Scalars['Boolean'];
-  roles: Array<Role>;
-  lastLogin?: Maybe<Scalars['String']>;
   customFields?: Maybe<Scalars['JSON']>;
+  id: Scalars['ID'];
+  identifier: Scalars['String'];
+  lastLogin?: Maybe<Scalars['String']>;
+  roles: Array<Role>;
+  updatedAt: Scalars['DateTime'];
+  verified: Scalars['Boolean'];
 };
 
 export type UserStatus = {
@@ -3703,14 +3754,22 @@ export type UserStatusInput = {
 
 export type Vendor = Node & {
    __typename?: 'Vendor';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
   emailAddress: Scalars['String'];
-  user: User;
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
   products: Array<Product>;
+  updatedAt: Scalars['DateTime'];
+  user: User;
+};
+
+export type VendorFilterParameter = {
+  createdAt?: Maybe<DateOperators>;
+  updatedAt?: Maybe<DateOperators>;
+  firstName?: Maybe<StringOperators>;
+  lastName?: Maybe<StringOperators>;
+  emailAddress?: Maybe<StringOperators>;
 };
 
 export type VendorList = PaginatedList & {
@@ -3719,13 +3778,29 @@ export type VendorList = PaginatedList & {
   totalItems: Scalars['Int'];
 };
 
+export type VendorListOptions = {
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+  sort?: Maybe<VendorSortParameter>;
+  filter?: Maybe<VendorFilterParameter>;
+};
+
+export type VendorSortParameter = {
+  id?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+  firstName?: Maybe<SortOrder>;
+  lastName?: Maybe<SortOrder>;
+  emailAddress?: Maybe<SortOrder>;
+};
+
 export type Zone = Node & {
    __typename?: 'Zone';
-  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  name: Scalars['String'];
+  id: Scalars['ID'];
   members: Array<Country>;
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type RoleFragment = (
@@ -5762,54 +5837,6 @@ export type UpdateGlobalSettingsMutation = (
   ) }
 );
 
-type CustomFieldConfig_StringCustomFieldConfig_Fragment = (
-  { __typename?: 'StringCustomFieldConfig' }
-  & Pick<StringCustomFieldConfig, 'name' | 'type' | 'readonly'>
-  & { description?: Maybe<Array<(
-    { __typename?: 'LocalizedString' }
-    & Pick<LocalizedString, 'languageCode' | 'value'>
-  )>>, label?: Maybe<Array<(
-    { __typename?: 'LocalizedString' }
-    & Pick<LocalizedString, 'languageCode' | 'value'>
-  )>> }
-);
-
-type CustomFieldConfig_LocaleStringCustomFieldConfig_Fragment = (
-  { __typename?: 'LocaleStringCustomFieldConfig' }
-  & Pick<LocaleStringCustomFieldConfig, 'name' | 'type' | 'readonly'>
-  & { description?: Maybe<Array<(
-    { __typename?: 'LocalizedString' }
-    & Pick<LocalizedString, 'languageCode' | 'value'>
-  )>>, label?: Maybe<Array<(
-    { __typename?: 'LocalizedString' }
-    & Pick<LocalizedString, 'languageCode' | 'value'>
-  )>> }
-);
-
-type CustomFieldConfig_IntCustomFieldConfig_Fragment = (
-  { __typename?: 'IntCustomFieldConfig' }
-  & Pick<IntCustomFieldConfig, 'name' | 'type' | 'readonly'>
-  & { description?: Maybe<Array<(
-    { __typename?: 'LocalizedString' }
-    & Pick<LocalizedString, 'languageCode' | 'value'>
-  )>>, label?: Maybe<Array<(
-    { __typename?: 'LocalizedString' }
-    & Pick<LocalizedString, 'languageCode' | 'value'>
-  )>> }
-);
-
-type CustomFieldConfig_FloatCustomFieldConfig_Fragment = (
-  { __typename?: 'FloatCustomFieldConfig' }
-  & Pick<FloatCustomFieldConfig, 'name' | 'type' | 'readonly'>
-  & { description?: Maybe<Array<(
-    { __typename?: 'LocalizedString' }
-    & Pick<LocalizedString, 'languageCode' | 'value'>
-  )>>, label?: Maybe<Array<(
-    { __typename?: 'LocalizedString' }
-    & Pick<LocalizedString, 'languageCode' | 'value'>
-  )>> }
-);
-
 type CustomFieldConfig_BooleanCustomFieldConfig_Fragment = (
   { __typename?: 'BooleanCustomFieldConfig' }
   & Pick<BooleanCustomFieldConfig, 'name' | 'type' | 'readonly'>
@@ -5834,7 +5861,55 @@ type CustomFieldConfig_DateTimeCustomFieldConfig_Fragment = (
   )>> }
 );
 
-export type CustomFieldConfigFragment = CustomFieldConfig_StringCustomFieldConfig_Fragment | CustomFieldConfig_LocaleStringCustomFieldConfig_Fragment | CustomFieldConfig_IntCustomFieldConfig_Fragment | CustomFieldConfig_FloatCustomFieldConfig_Fragment | CustomFieldConfig_BooleanCustomFieldConfig_Fragment | CustomFieldConfig_DateTimeCustomFieldConfig_Fragment;
+type CustomFieldConfig_FloatCustomFieldConfig_Fragment = (
+  { __typename?: 'FloatCustomFieldConfig' }
+  & Pick<FloatCustomFieldConfig, 'name' | 'type' | 'readonly'>
+  & { description?: Maybe<Array<(
+    { __typename?: 'LocalizedString' }
+    & Pick<LocalizedString, 'languageCode' | 'value'>
+  )>>, label?: Maybe<Array<(
+    { __typename?: 'LocalizedString' }
+    & Pick<LocalizedString, 'languageCode' | 'value'>
+  )>> }
+);
+
+type CustomFieldConfig_IntCustomFieldConfig_Fragment = (
+  { __typename?: 'IntCustomFieldConfig' }
+  & Pick<IntCustomFieldConfig, 'name' | 'type' | 'readonly'>
+  & { description?: Maybe<Array<(
+    { __typename?: 'LocalizedString' }
+    & Pick<LocalizedString, 'languageCode' | 'value'>
+  )>>, label?: Maybe<Array<(
+    { __typename?: 'LocalizedString' }
+    & Pick<LocalizedString, 'languageCode' | 'value'>
+  )>> }
+);
+
+type CustomFieldConfig_LocaleStringCustomFieldConfig_Fragment = (
+  { __typename?: 'LocaleStringCustomFieldConfig' }
+  & Pick<LocaleStringCustomFieldConfig, 'name' | 'type' | 'readonly'>
+  & { description?: Maybe<Array<(
+    { __typename?: 'LocalizedString' }
+    & Pick<LocalizedString, 'languageCode' | 'value'>
+  )>>, label?: Maybe<Array<(
+    { __typename?: 'LocalizedString' }
+    & Pick<LocalizedString, 'languageCode' | 'value'>
+  )>> }
+);
+
+type CustomFieldConfig_StringCustomFieldConfig_Fragment = (
+  { __typename?: 'StringCustomFieldConfig' }
+  & Pick<StringCustomFieldConfig, 'name' | 'type' | 'readonly'>
+  & { description?: Maybe<Array<(
+    { __typename?: 'LocalizedString' }
+    & Pick<LocalizedString, 'languageCode' | 'value'>
+  )>>, label?: Maybe<Array<(
+    { __typename?: 'LocalizedString' }
+    & Pick<LocalizedString, 'languageCode' | 'value'>
+  )>> }
+);
+
+export type CustomFieldConfigFragment = CustomFieldConfig_BooleanCustomFieldConfig_Fragment | CustomFieldConfig_DateTimeCustomFieldConfig_Fragment | CustomFieldConfig_FloatCustomFieldConfig_Fragment | CustomFieldConfig_IntCustomFieldConfig_Fragment | CustomFieldConfig_LocaleStringCustomFieldConfig_Fragment | CustomFieldConfig_StringCustomFieldConfig_Fragment;
 
 export type StringCustomFieldFragment = (
   { __typename?: 'StringCustomFieldConfig' }
@@ -5879,26 +5954,6 @@ export type DateTimeCustomFieldFragment = (
   & CustomFieldConfig_DateTimeCustomFieldConfig_Fragment
 );
 
-type CustomFields_StringCustomFieldConfig_Fragment = (
-  { __typename?: 'StringCustomFieldConfig' }
-  & StringCustomFieldFragment
-);
-
-type CustomFields_LocaleStringCustomFieldConfig_Fragment = (
-  { __typename?: 'LocaleStringCustomFieldConfig' }
-  & LocaleStringCustomFieldFragment
-);
-
-type CustomFields_IntCustomFieldConfig_Fragment = (
-  { __typename?: 'IntCustomFieldConfig' }
-  & IntCustomFieldFragment
-);
-
-type CustomFields_FloatCustomFieldConfig_Fragment = (
-  { __typename?: 'FloatCustomFieldConfig' }
-  & FloatCustomFieldFragment
-);
-
 type CustomFields_BooleanCustomFieldConfig_Fragment = (
   { __typename?: 'BooleanCustomFieldConfig' }
   & BooleanCustomFieldFragment
@@ -5909,7 +5964,27 @@ type CustomFields_DateTimeCustomFieldConfig_Fragment = (
   & DateTimeCustomFieldFragment
 );
 
-export type CustomFieldsFragment = CustomFields_StringCustomFieldConfig_Fragment | CustomFields_LocaleStringCustomFieldConfig_Fragment | CustomFields_IntCustomFieldConfig_Fragment | CustomFields_FloatCustomFieldConfig_Fragment | CustomFields_BooleanCustomFieldConfig_Fragment | CustomFields_DateTimeCustomFieldConfig_Fragment;
+type CustomFields_FloatCustomFieldConfig_Fragment = (
+  { __typename?: 'FloatCustomFieldConfig' }
+  & FloatCustomFieldFragment
+);
+
+type CustomFields_IntCustomFieldConfig_Fragment = (
+  { __typename?: 'IntCustomFieldConfig' }
+  & IntCustomFieldFragment
+);
+
+type CustomFields_LocaleStringCustomFieldConfig_Fragment = (
+  { __typename?: 'LocaleStringCustomFieldConfig' }
+  & LocaleStringCustomFieldFragment
+);
+
+type CustomFields_StringCustomFieldConfig_Fragment = (
+  { __typename?: 'StringCustomFieldConfig' }
+  & StringCustomFieldFragment
+);
+
+export type CustomFieldsFragment = CustomFields_BooleanCustomFieldConfig_Fragment | CustomFields_DateTimeCustomFieldConfig_Fragment | CustomFields_FloatCustomFieldConfig_Fragment | CustomFields_IntCustomFieldConfig_Fragment | CustomFields_LocaleStringCustomFieldConfig_Fragment | CustomFields_StringCustomFieldConfig_Fragment;
 
 export type GetServerConfigQueryVariables = {};
 
@@ -5923,239 +5998,239 @@ export type GetServerConfigQuery = (
       & { customFieldConfig: (
         { __typename?: 'CustomFields' }
         & { Address: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, Collection: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, Customer: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, Facet: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, FacetValue: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, GlobalSettings: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, Order: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, OrderLine: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, Product: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, ProductOption: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, ProductOptionGroup: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, ProductVariant: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )>, User: Array<(
-          { __typename?: 'StringCustomFieldConfig' }
-          & CustomFields_StringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'LocaleStringCustomFieldConfig' }
-          & CustomFields_LocaleStringCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'IntCustomFieldConfig' }
-          & CustomFields_IntCustomFieldConfig_Fragment
-        ) | (
-          { __typename?: 'FloatCustomFieldConfig' }
-          & CustomFields_FloatCustomFieldConfig_Fragment
-        ) | (
           { __typename?: 'BooleanCustomFieldConfig' }
           & CustomFields_BooleanCustomFieldConfig_Fragment
         ) | (
           { __typename?: 'DateTimeCustomFieldConfig' }
           & CustomFields_DateTimeCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'FloatCustomFieldConfig' }
+          & CustomFields_FloatCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'IntCustomFieldConfig' }
+          & CustomFields_IntCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'LocaleStringCustomFieldConfig' }
+          & CustomFields_LocaleStringCustomFieldConfig_Fragment
+        ) | (
+          { __typename?: 'StringCustomFieldConfig' }
+          & CustomFields_StringCustomFieldConfig_Fragment
         )> }
       ) }
     ) }

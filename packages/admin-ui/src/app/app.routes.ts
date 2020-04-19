@@ -26,6 +26,10 @@ export const routes: Route[] = [
                 loadChildren: () => import('@vendure/admin-ui/customer').then(m => m.CustomerModule),
             },
             {
+                path: 'vendor',
+                loadChildren: () => import('@vendure/admin-ui/vendor').then(m => m.VendorModule),
+            },
+            {
                 path: 'orders',
                 loadChildren: () => import('@vendure/admin-ui/order').then(m => m.OrderModule),
             },

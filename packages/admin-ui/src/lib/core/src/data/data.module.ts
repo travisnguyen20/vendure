@@ -1,6 +1,7 @@
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { RetryLink } from 'apollo-link-retry';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { ApolloClientOptions } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
@@ -26,7 +27,7 @@ export function createApollo(
     fetchAdapter: FetchAdapter,
     injector: Injector,
 ): ApolloClientOptions<any> {
-    const { apiHost, apiPort, adminApiPath, tokenMethod } = getAppConfig();
+    const { apiHost, apiPort, adminApiPath, vendorApiPath, tokenMethod } = getAppConfig();
     const host = apiHost === 'auto' ? `${location.protocol}//${location.hostname}` : apiHost;
     const port = apiPort
         ? apiPort === 'auto'
@@ -75,10 +76,17 @@ export function createApollo(
                     }
                 }
             }),
-            createUploadLink({
-                uri: `${host}${port}/${adminApiPath}`,
-                fetch: fetchAdapter.fetch,
-            }),
+            new RetryLink().split(
+                (operation) => operation.getContext().endpoint !== 'vendor',
+                createUploadLink({
+                    uri: `${host}${port}/${adminApiPath}`,
+                    fetch: fetchAdapter.fetch,
+                })),
+                createUploadLink({
+                    uri: `${host}${port}/${vendorApiPath}`,
+                    fetch: fetchAdapter.fetch,
+                })
+            ,
         ]),
         cache: apolloCache,
         resolvers: clientResolvers,

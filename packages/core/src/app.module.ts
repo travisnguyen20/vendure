@@ -37,11 +37,12 @@ export class AppModule implements NestModule, OnApplicationBootstrap, OnApplicat
     }
 
     configure(consumer: MiddlewareConsumer) {
-        const { adminApiPath, shopApiPath } = this.configService;
+        const { adminApiPath, shopApiPath, vendorApiPath } = this.configService;
         const i18nextHandler = this.i18nService.handle();
         const defaultMiddleware: Array<{ handler: RequestHandler; route?: string }> = [
             { handler: i18nextHandler, route: adminApiPath },
             { handler: i18nextHandler, route: shopApiPath },
+            { handler: i18nextHandler, route: vendorApiPath },
         ];
         if (this.configService.authOptions.tokenMethod === 'cookie') {
             const cookieHandler = cookieSession({
@@ -51,6 +52,7 @@ export class AppModule implements NestModule, OnApplicationBootstrap, OnApplicat
             });
             defaultMiddleware.push({ handler: cookieHandler, route: adminApiPath });
             defaultMiddleware.push({ handler: cookieHandler, route: shopApiPath });
+            defaultMiddleware.push({ handler: cookieHandler, route: vendorApiPath });
         }
         const allMiddleware = defaultMiddleware.concat(this.configService.middleware);
         const middlewareByRoute = this.groupMiddlewareByRoute(allMiddleware);

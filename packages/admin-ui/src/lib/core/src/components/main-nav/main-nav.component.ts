@@ -76,6 +76,19 @@ export class MainNavComponent implements OnInit {
                     },
                 ],
             },
+             {
+                id: 'vendors',
+                label: _('nav.vendors'),
+                requiresPermission: 'ReadVendor',
+                items: [
+                    {
+                        id: 'vendors',
+                        label: _('nav.vendors'),
+                        routerLink: ['/vendor', 'vendors'],
+                        icon: 'user',
+                    },
+                ],
+            },
             {
                 id: 'marketing',
                 label: _('nav.marketing'),

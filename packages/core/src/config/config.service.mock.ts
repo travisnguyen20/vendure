@@ -9,6 +9,7 @@ export class MockConfigService implements MockClass<ConfigService> {
     defaultChannelToken: 'channel-token';
     channelTokenKey: 'vendure-token';
     adminApiPath = 'admin-api';
+    vendorApiPath = 'vendor-api';
     shopApiPath = 'shop-api';
     port = 3000;
     cors = false;

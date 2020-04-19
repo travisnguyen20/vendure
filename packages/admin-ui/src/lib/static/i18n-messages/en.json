@@ -30,6 +30,7 @@
     "collections": "Collections",
     "countries": "Countries",
     "customers": "Customers",
+    "vendors": "Vendors",
     "dashboard": "Dashboard",
     "facets": "Facets",
     "global-settings": "Global settings",
@@ -483,7 +484,11 @@
     "settings": "Settings",
     "shipping-methods": "Shipping methods",
     "tax-categories": "Tax categories",
-    "tax-rates": "Tax Rates"
+    "tax-rates": "Tax Rates",
+    "vendors": "Vendors"
+  },
+  "vendor": {
+    "create-new-vendor" : "Create new Vendor"
   },
   "order": {
     "add-note": "Add note",

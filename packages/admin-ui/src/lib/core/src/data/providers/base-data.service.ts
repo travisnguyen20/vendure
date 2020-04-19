@@ -51,8 +51,27 @@ export class BaseDataService {
         const withCustomFields = addCustomFields(query, this.customFields);
         const queryRef = this.apollo.watchQuery<T, V>({
             query: withCustomFields,
+            variables: variables,
+            fetchPolicy,
+        });
+        const queryResult = new QueryResult<T, any>(queryRef, this.apollo);
+        return queryResult;
+    }
+
+    /**
+     * Performs a GraphQL watch query
+     */
+    queryVendor<T, V = Record<string, any>>(
+        query: DocumentNode,
+        variables?: V,
+        fetchPolicy: WatchQueryFetchPolicy = 'cache-and-network',
+    ): QueryResult<T, V> {
+        const withCustomFields = addCustomFields(query, this.customFields);
+        const queryRef = this.apollo.watchQuery<T, V>({
+            query: withCustomFields,
             variables,
             fetchPolicy,
+            context: { endpoint: 'vendor' }
         });
         const queryResult = new QueryResult<T, any>(queryRef, this.apollo);
         return queryResult;
@@ -74,6 +93,28 @@ export class BaseDataService {
                 mutation: withCustomFields,
                 variables: withoutReadonlyFields,
                 update: update as any,
+                
+            })
+            .pipe(map(result => result.data as T));
+    }
+
+    /**
+     * Performs a GraphQL mutation
+     */
+    mutateVendor<T, V = Record<string, any>>(
+        mutation: DocumentNode,
+        variables?: V,
+        update?: TypedMutationUpdateFn<T>,
+    ): Observable<T> {
+        const withCustomFields = addCustomFields(mutation, this.customFields);
+        const withoutReadonlyFields = this.removeReadonlyCustomFieldsFromVariables(mutation, variables);
+
+        return this.apollo
+            .mutate<T, V>({
+                mutation: withCustomFields,
+                variables: withoutReadonlyFields,
+                update: update as any,
+                context: { endpoint: 'vendor' }
             })
             .pipe(map(result => result.data as T));
     }

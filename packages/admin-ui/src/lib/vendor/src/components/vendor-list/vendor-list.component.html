@@ -1,0 +1,35 @@
+<vdr-action-bar>
+    <vdr-ab-right>
+        <vdr-action-bar-items locationId="vendor-list"></vdr-action-bar-items>
+        <a class="btn btn-primary" [routerLink]="['./create']" *vdrIfPermissions="'CreateVendor'">
+            <clr-icon shape="plus"></clr-icon>
+            {{ 'vendor.create-new-vendor' | translate }}
+        </a>
+    </vdr-ab-right>
+</vdr-action-bar>
+
+<vdr-data-table
+    [items]="items$ | async"
+    [itemsPerPage]="itemsPerPage$ | async"
+    [totalItems]="totalItems$ | async"
+    [currentPage]="currentPage$ | async"
+    (pageChange)="setPageNumber($event)"
+    (itemsPerPageChange)="setItemsPerPage($event)"
+>
+    <vdr-dt-column>{{ 'settings.first-name' | translate }}</vdr-dt-column>
+    <vdr-dt-column>{{ 'settings.last-name' | translate }}</vdr-dt-column>
+    <vdr-dt-column>{{ 'settings.email-address' | translate }}</vdr-dt-column>
+    <vdr-dt-column></vdr-dt-column>
+    <ng-template let-vendor="item">
+        <td class="left align-middle">{{ vendor.firstName }}</td>
+        <td class="left align-middle">{{ vendor.lastName }}</td>
+        <td class="left align-middle">{{ vendor.emailAddress }}</td>
+        <td class="right align-middle">
+            <vdr-table-row-action
+                iconShape="edit"
+                [label]="'common.edit' | translate"
+                [linkTo]="['./', vendor.id]"
+            ></vdr-table-row-action>
+        </td>
+    </ng-template>
+</vdr-data-table>
